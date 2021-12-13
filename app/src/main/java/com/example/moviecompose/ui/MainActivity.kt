@@ -19,8 +19,17 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "home_screen") {
                     composable("home_screen") {
-                        HomeScreen(navController = navController)
+                        HomeScreen()
                     }
+//                    composable("movie_screen") {
+//                        MovieScreen(navController = navController)
+//                    }
+//                    composable("my_list_screen") {
+//                        MyListScreen(navController = navController)
+//                    }
+//                    composable("tv_series_screen") {
+//                        SeriesScreen(navController = navController)
+//                    }
                 }
             }
         }

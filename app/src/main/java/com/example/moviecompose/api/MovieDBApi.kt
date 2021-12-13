@@ -2,6 +2,7 @@ package com.example.moviecompose.api
 
 import com.example.moviecompose.BuildConfig
 import com.example.moviecompose.model.MovieResponse
+import com.example.moviecompose.model.SeriesResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -27,5 +28,18 @@ interface MovieDBApi {
         @Query("page") page: Int = 1,
         @Query("with_genres") genre: Int
     ): MovieResponse
+
+    @GET("3/trending/tv/week")
+    suspend fun getTrendingSeries(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("page") page: Int = 1
+    ): SeriesResponse
+
+    @GET("3/discover/tv")
+    suspend fun getSeriesBasedOnGenre(
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("page") page: Int = 1,
+        @Query("with_genres") genre: Int
+    ): SeriesResponse
 
 }
