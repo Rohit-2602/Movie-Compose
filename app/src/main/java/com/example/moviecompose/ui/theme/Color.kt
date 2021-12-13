@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val background = Color(0xFF111820)
 val secondaryBackground = Color(0xFF1C242B)
-val ratingBlue = Color(0xFF004B97)
+val blue = Color(0xFF4B97C5)
 
 val Purple200 = Color(0xFFBB86FC)
 val Purple500 = Color(0xFF6200EE)
