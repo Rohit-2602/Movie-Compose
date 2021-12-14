@@ -24,6 +24,8 @@ import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.moviecompose.model.Movie
 import com.example.moviecompose.model.Series
+import com.example.moviecompose.util.Routes.GENRE_MOVIE_SCREEN_ROUTE
+import com.example.moviecompose.util.Routes.GENRE_SERIES_SCREEN_ROUTE
 import com.example.moviecompose.util.Routes.MOVIE_DETAIL_SCREEN_ROUTE
 import com.example.moviecompose.util.Routes.SERIES_DETAIL_SCREEN_ROUTE
 
@@ -55,7 +57,12 @@ fun HomeScreenHeaderItem(text: String, selected: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-fun MoviesSeriesHeader(title: String) {
+fun MoviesSeriesHeader(
+    mainNavController: NavController,
+    title: String,
+    isMovie: Boolean,
+    genreId: Int
+) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -74,9 +81,14 @@ fun MoviesSeriesHeader(title: String) {
         Text(text = "See all",
             style = TextStyle(color = MaterialTheme.colors.primary, fontSize = 15.sp),
             modifier = Modifier
-                .padding(end = 20.dp)
+                .fillMaxHeight()
+                .padding(start = 20.dp, end = 20.dp, top = 10.dp)
                 .clickable {
-
+                    if (isMovie) {
+                        mainNavController.navigate("$GENRE_MOVIE_SCREEN_ROUTE/${genreId}/${title}")
+                    } else {
+                        mainNavController.navigate("$GENRE_SERIES_SCREEN_ROUTE/${genreId}/${title}")
+                    }
                 }
         )
     }

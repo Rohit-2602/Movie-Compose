@@ -60,7 +60,7 @@ fun MovieDetailScreen(
                     val movie = movieDetails!!
                     BackDropPoster(backDropPoster = viewModel.getBackDropPoster(movie.backdrop_path))
                     Row {
-                        GenreRating(genre = movie.genres[0], voteAverage = movie.vote_average)
+                        GenreRating(genre = movie.genres[0].name, voteAverage = movie.vote_average)
                         MovieRunTime(runTime = movie.runtime)
                     }
                     Title(movieTitle = movie.original_title, movieDescription = movie.overview)

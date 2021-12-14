@@ -59,7 +59,7 @@ fun SeriesDetailScreen(
                     val series = seriesDetail!!
                     BackDropPoster(backDropPoster = viewModel.getBackDropPoster(series.backdrop_path))
                     GenreRating(
-                        genre = series.genres[0],
+                        genre = series.genres[0].name,
                         voteAverage = series.vote_average
                     )
                     Title(

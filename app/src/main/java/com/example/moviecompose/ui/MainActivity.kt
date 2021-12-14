@@ -11,6 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.moviecompose.ui.detailScreen.MovieDetailScreen
 import com.example.moviecompose.ui.detailScreen.SeriesDetailScreen
+import com.example.moviecompose.ui.genreDetailScreen.GenreMovieDetail
+import com.example.moviecompose.ui.genreDetailScreen.GenreSeriesDetail
 import com.example.moviecompose.ui.homeScreen.HomeScreen
 import com.example.moviecompose.ui.homeScreen.movieScreen.MovieScreen
 import com.example.moviecompose.ui.homeScreen.myListScreen.MyListScreen
@@ -65,6 +67,44 @@ class MainActivity : ComponentActivity() {
                             it.arguments?.getInt("seriesId")
                         }
                         SeriesDetailScreen(navController = navController, seriesId = seriesId!!)
+                    }
+                    composable(
+                        route = "${Routes.GENRE_MOVIE_SCREEN_ROUTE}/{genreId}/{genreTitle}",
+                        arguments = listOf(
+                            navArgument("genreId") {
+                                type = NavType.IntType
+                            },
+                            navArgument("genreTitle") {
+                                type = NavType.StringType
+                            }
+                        )
+                    ) {
+                        val genreId = remember {
+                            it.arguments?.getInt("genreId")
+                        }
+                        val genreTitle = remember {
+                            it.arguments?.getString("genreTitle")
+                        }
+                        GenreMovieDetail(mainNavController = navController, genreId = genreId!!, genreTitle = genreTitle!!)
+                    }
+                    composable(
+                        route = "${Routes.GENRE_SERIES_SCREEN_ROUTE}/{genreId}/{genreTitle}",
+                        arguments = listOf(
+                            navArgument("genreId") {
+                                type = NavType.IntType
+                            },
+                            navArgument("genreTitle") {
+                                type = NavType.StringType
+                            }
+                        )
+                    ) {
+                        val genreId = remember {
+                            it.arguments?.getInt("genreId")
+                        }
+                        val genreTitle = remember {
+                            it.arguments?.getString("genreTitle")
+                        }
+                        GenreSeriesDetail(mainNavController = navController, genreId = genreId!!, genreTitle = genreTitle!!)
                     }
                 }
             }

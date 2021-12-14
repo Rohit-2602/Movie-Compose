@@ -12,18 +12,18 @@ class MovieDBRepository @Inject constructor(private val movieDBApi: MovieDBApi) 
     fun getPosterPath(posterPath: String?): String = Constant.getPosterPath(posterPath)
     fun getBackDropPath(backdropPath: String?): String = Constant.getBackDropPath(backdropPath)
 
-    suspend fun getTrendingMovies(): Resource<MovieResponse> {
+    suspend fun getTrendingMovies(page: Int = 1): Resource<MovieResponse> {
         val result = try {
-            movieDBApi.getTrendingMovies()
+            movieDBApi.getTrendingMovies(page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
         return Resource.Success(result)
     }
 
-    suspend fun getMoviesBasedOnGenre(genre: Int): Resource<MovieResponse> {
+    suspend fun getMoviesBasedOnGenre(genre: Int, page: Int = 1): Resource<MovieResponse> {
         val result = try {
-            movieDBApi.getMoviesBasedOnGenre(genre = genre)
+            movieDBApi.getMoviesBasedOnGenre(genre = genre, page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
@@ -39,18 +39,18 @@ class MovieDBRepository @Inject constructor(private val movieDBApi: MovieDBApi) 
         return Resource.Success(result)
     }
 
-    suspend fun getTrendingSeries(): Resource<SeriesResponse> {
+    suspend fun getTrendingSeries(page: Int = 1): Resource<SeriesResponse> {
         val result = try {
-            movieDBApi.getTrendingSeries()
+            movieDBApi.getTrendingSeries(page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
         return Resource.Success(result)
     }
 
-    suspend fun getSeriesBasedOnGenre(genre: Int): Resource<SeriesResponse> {
+    suspend fun getSeriesBasedOnGenre(genre: Int, page: Int = 1): Resource<SeriesResponse> {
         val result = try {
-            movieDBApi.getSeriesBasedOnGenre(genre = genre)
+            movieDBApi.getSeriesBasedOnGenre(genre = genre, page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }

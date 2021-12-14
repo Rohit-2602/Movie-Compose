@@ -1,7 +1,10 @@
 package com.example.moviecompose.ui.homeScreen.movieScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.CircularProgressIndicator
@@ -28,6 +31,14 @@ fun MovieScreen(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
+    val trendingMovies by rememberSaveable {
+        viewModel.getTrendingMovies()
+    }
+
+    val isLoading by remember {
+        viewModel.isLoading
+    }
+
     val errorMessage by remember {
         viewModel.loadError
     }
@@ -42,11 +53,17 @@ fun MovieScreen(
                 viewModel.getTrendingMovies()
             }
         }
-        if (errorMessage.isEmpty()) {
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+        if (errorMessage.isEmpty() && !isLoading) {
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
                     TrendingMovieList(
-                        mainNavController = mainNavController
+                        mainNavController = mainNavController,
+                        trendingMovies = trendingMovies
                     )
                 }
                 item {
@@ -66,28 +83,14 @@ fun MovieScreen(
 @Composable
 fun TrendingMovieList(
     mainNavController: NavController,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    trendingMovies: List<Movie>
 ) {
-    val trendingMovies by rememberSaveable {
-        viewModel.getTrendingMovies()
-    }
-    val isLoading by remember {
-        viewModel.isLoading
-    }
-    if (isLoading) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        MovieList(
-            mainNavController = mainNavController,
-            title = "Trending",
-            movieList = trendingMovies
-        )
-    }
+    MovieList(
+        mainNavController = mainNavController,
+        title = "Trending",
+        movieList = trendingMovies,
+        genreId = 0
+    )
 }
 
 @Composable
@@ -100,33 +103,23 @@ fun GenreMovieList(
     val genreMovies by rememberSaveable {
         viewModel.getMoviesByGenre(genre = genreId)
     }
-    val isLoading by remember {
-        viewModel.isLoading
-    }
-    if (isLoading) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        MovieList(
-            mainNavController = mainNavController,
-            title = title,
-            movieList = genreMovies
-        )
-    }
+    MovieList(
+        mainNavController = mainNavController,
+        title = title,
+        movieList = genreMovies,
+        genreId = genreId
+    )
 }
 
 @Composable
 fun MovieList(
     mainNavController: NavController,
     title: String,
+    genreId: Int,
     movieList: List<Movie>,
 ) {
     Column {
-        MoviesSeriesHeader(title = title)
+        MoviesSeriesHeader(mainNavController = mainNavController, title = title, isMovie = true, genreId = genreId)
         LazyRow(modifier = Modifier.padding(end = 10.dp, top = 10.dp)) {
             val itemCount = if (movieList.size > 10) {
                 10

@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.moviecompose.R
-import com.example.moviecompose.model.Genre
 
 @Composable
 fun BackDropPoster(backDropPoster: String) {
@@ -44,18 +43,21 @@ fun BackDropPoster(backDropPoster: String) {
             contentDescription = "Back Button",
             modifier = Modifier
                 .padding(start = 10.dp, top = 10.dp)
-                .width(30.dp)
-                .height(30.dp)
+                .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
+                .clip(shape = RoundedCornerShape(10.dp))
+                .background(color = MaterialTheme.colors.background)
+                .size(30.dp)
+                .padding(5.dp)
         )
     }
 }
 
 @Composable
-fun GenreRating(genre: Genre, voteAverage: Double) {
+fun GenreRating(genre: String, voteAverage: Double) {
     Row(Modifier.padding(start = 10.dp, top = 10.dp)) {
         // Genres
         Text(
-            text = genre.name,
+            text = genre,
             style = TextStyle(
                 color = Color.White,
                 fontSize = 17.sp

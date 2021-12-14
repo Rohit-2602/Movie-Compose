@@ -1,7 +1,10 @@
 package com.example.moviecompose.ui.homeScreen.seriesScreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.CircularProgressIndicator
@@ -28,6 +31,14 @@ fun SeriesScreen(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
+    val trendingSeries by rememberSaveable {
+        viewModel.getTrendingSeries()
+    }
+
+    val isLoading by remember {
+        viewModel.isLoading
+    }
+
     val errorMessage by remember {
         viewModel.loadError
     }
@@ -42,14 +53,26 @@ fun SeriesScreen(
                 viewModel.getTrendingSeries()
             }
         }
-        if (errorMessage.isEmpty()) {
+        if (isLoading) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        }
+        if (errorMessage.isEmpty() && !isLoading) {
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
-                    TrendingSeriesList(mainNavController = mainNavController)
+                    TrendingSeriesList(
+                        mainNavController = mainNavController,
+                        trendingSeries = trendingSeries
+                    )
                 }
                 item {
                     for ((key, value) in Constant.SERIES_GENRE_LIST) {
-                        GenreSeriesList(mainNavController = mainNavController, title = key, genreId = value)
+                        GenreSeriesList(
+                            mainNavController = mainNavController,
+                            title = key,
+                            genreId = value
+                        )
                     }
                 }
             }
@@ -60,24 +83,14 @@ fun SeriesScreen(
 @Composable
 fun TrendingSeriesList(
     mainNavController: NavController,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    trendingSeries: List<Series>
 ) {
-    val trendingSeries by rememberSaveable {
-        viewModel.getTrendingSeries()
-    }
-    val isLoading by remember {
-        viewModel.isLoading
-    }
-    if (isLoading) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        SeriesList(mainNavController = mainNavController, title = "Trending", seriesList = trendingSeries)
-    }
+    SeriesList(
+        mainNavController = mainNavController,
+        title = "Trending",
+        seriesList = trendingSeries,
+        genreId = 0
+    )
 }
 
 @Composable
@@ -90,29 +103,23 @@ fun GenreSeriesList(
     val genreSeries by rememberSaveable {
         viewModel.getSeriesByGenre(genre = genreId)
     }
-    val isLoading by remember {
-        viewModel.isLoading
-    }
-    if (isLoading) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        SeriesList(mainNavController = mainNavController, title = title, seriesList = genreSeries)
-    }
+    SeriesList(
+        mainNavController = mainNavController,
+        title = title,
+        seriesList = genreSeries,
+        genreId = genreId
+    )
 }
 
 @Composable
 fun SeriesList(
     mainNavController: NavController,
     title: String,
+    genreId: Int,
     seriesList: List<Series>,
 ) {
     Column {
-        MoviesSeriesHeader(title = title)
+        MoviesSeriesHeader(mainNavController = mainNavController, title = title, genreId = genreId, isMovie = false)
         LazyRow(modifier = Modifier.padding(end = 10.dp, top = 10.dp)) {
             val itemCount = if (seriesList.size > 10) {
                 10

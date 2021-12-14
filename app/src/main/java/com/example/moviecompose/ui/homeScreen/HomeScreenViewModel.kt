@@ -51,7 +51,6 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
     }
 
     fun getMoviesByGenre(genre: Int): MutableState<List<Movie>> {
-        isLoading.value = true
         val genreMovie = mutableStateOf<List<Movie>>(listOf())
         viewModelScope.launch {
             when (val result = homeRepository.getMoviesBasedOnGenre(genre = genre)) {
@@ -61,16 +60,12 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
                             movie.poster_path != null
                         }
                     loadError.value = ""
-                    isLoading.value = false
                     genreMovie.value += movies
                 }
                 is Resource.Error -> {
                     loadError.value = result.message!!
-                    isLoading.value = false
                 }
-                is Resource.Loading -> {
-                    isLoading.value = true
-                }
+                is Resource.Loading -> {}
             }
         }
         return genreMovie
@@ -103,7 +98,6 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
     }
 
     fun getSeriesByGenre(genre: Int): MutableState<List<Series>> {
-        isLoading.value = true
         val genreSeries = mutableStateOf<List<Series>>(listOf())
         viewModelScope.launch {
             when (val result = homeRepository.getSeriesBasedOnGenre(genre = genre)) {
@@ -113,16 +107,12 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
                             series.poster_path != null
                         }
                     loadError.value = ""
-                    isLoading.value = false
                     genreSeries.value += series
                 }
                 is Resource.Error -> {
                     loadError.value = result.message!!
-                    isLoading.value = false
                 }
-                is Resource.Loading -> {
-                    isLoading.value = true
-                }
+                is Resource.Loading -> {}
             }
         }
         return genreSeries
