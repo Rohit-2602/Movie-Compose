@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,14 +17,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.moviecompose.model.Movie
 import com.example.moviecompose.ui.homeScreen.HomeScreenViewModel
-import com.example.moviecompose.ui.homeScreen.MovieSeriesImage
+import com.example.moviecompose.ui.homeScreen.MovieImage
 import com.example.moviecompose.ui.homeScreen.MoviesSeriesHeader
 import com.example.moviecompose.ui.homeScreen.RetrySection
 import com.example.moviecompose.util.Constant
 
 @Composable
 fun MovieScreen(
-    navController: NavController,
+    mainNavController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
@@ -45,13 +46,13 @@ fun MovieScreen(
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
                     TrendingMovieList(
-                        navController = navController
+                        mainNavController = mainNavController
                     )
                 }
                 item {
                     for ((key, value) in Constant.MOVIES_GENRE_LIST) {
                         GenreMovieList(
-                            navController = navController,
+                            mainNavController = mainNavController,
                             title = key,
                             genreId = value
                         )
@@ -64,22 +65,25 @@ fun MovieScreen(
 
 @Composable
 fun TrendingMovieList(
-    navController: NavController,
+    mainNavController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val trendingMovies by remember {
-        viewModel.trendingMovies
+    val trendingMovies by rememberSaveable {
+        viewModel.getTrendingMovies()
     }
     val isLoading by remember {
         viewModel.isLoading
     }
     if (isLoading) {
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             CircularProgressIndicator()
         }
     } else {
         MovieList(
-            navController = navController,
+            mainNavController = mainNavController,
             title = "Trending",
             movieList = trendingMovies
         )
@@ -88,33 +92,36 @@ fun TrendingMovieList(
 
 @Composable
 fun GenreMovieList(
-    navController: NavController,
+    mainNavController: NavController,
     title: String,
     genreId: Int,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val animationMovies by remember {
+    val genreMovies by rememberSaveable {
         viewModel.getMoviesByGenre(genre = genreId)
     }
     val isLoading by remember {
         viewModel.isLoading
     }
     if (isLoading) {
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             CircularProgressIndicator()
         }
     } else {
         MovieList(
-            navController = navController,
+            mainNavController = mainNavController,
             title = title,
-            movieList = animationMovies
+            movieList = genreMovies
         )
     }
 }
 
 @Composable
 fun MovieList(
-    navController: NavController,
+    mainNavController: NavController,
     title: String,
     movieList: List<Movie>,
 ) {
@@ -127,7 +134,10 @@ fun MovieList(
                 movieList.size
             }
             items(itemCount) {
-                MovieSeriesImage(navController = navController, posterPath = movieList[it].poster_path)
+                MovieImage(
+                    mainNavController = mainNavController,
+                    movie = movieList[it]
+                )
             }
         }
     }

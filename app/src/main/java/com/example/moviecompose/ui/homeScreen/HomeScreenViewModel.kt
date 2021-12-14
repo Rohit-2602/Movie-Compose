@@ -1,6 +1,5 @@
 package com.example.moviecompose.ui.homeScreen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -18,33 +17,22 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
     ViewModel() {
 
     val selectedTab = mutableStateOf(0)
-    val trendingMovies = mutableStateOf<List<Movie>>(listOf())
-    val trendingSeries = mutableStateOf<List<Series>>(listOf())
 
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
 
-    init {
-        getTrendingMovies()
-        getTrendingSeries()
-    }
-
-    private fun getPosterPath(posterPath: String?): String =
+    fun getPosterPath(posterPath: String?): String =
         homeRepository.getPosterPath(posterPath)
 
-    fun getTrendingMovies() {
+    fun getTrendingMovies(): MutableState<List<Movie>> {
+        val trendingMovies = mutableStateOf<List<Movie>>(listOf())
         isLoading.value = true
         viewModelScope.launch {
-            val result = homeRepository.getTrendingMovies()
-            when (result) {
+            when (val result = homeRepository.getTrendingMovies()) {
                 is Resource.Success -> {
                     val movies = result.data!!.results
                         .filter { movie ->
                             movie.poster_path != null
-                        }
-                        .mapIndexed { _, movie ->
-                            movie.poster_path = getPosterPath(movie.poster_path)
-                            movie
                         }
                     loadError.value = ""
                     isLoading.value = false
@@ -53,29 +41,24 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
                 is Resource.Error -> {
                     loadError.value = result.message!!
                     isLoading.value = false
-                    Log.i("Rohit", "Trending Error")
                 }
                 is Resource.Loading -> {
                     isLoading.value = true
                 }
             }
         }
+        return trendingMovies
     }
 
     fun getMoviesByGenre(genre: Int): MutableState<List<Movie>> {
         isLoading.value = true
         val genreMovie = mutableStateOf<List<Movie>>(listOf())
         viewModelScope.launch {
-            val result = homeRepository.getMoviesBasedOnGenre(genre = genre)
-            when (result) {
+            when (val result = homeRepository.getMoviesBasedOnGenre(genre = genre)) {
                 is Resource.Success -> {
                     val movies = result.data!!.results
                         .filter { movie ->
                             movie.poster_path != null
-                        }
-                        .mapIndexed { _, movie ->
-                            movie.poster_path = getPosterPath(movie.poster_path)
-                            movie
                         }
                     loadError.value = ""
                     isLoading.value = false
@@ -84,7 +67,6 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
                 is Resource.Error -> {
                     loadError.value = result.message!!
                     isLoading.value = false
-                    Log.i("Rohit", "Genre Error")
                 }
                 is Resource.Loading -> {
                     isLoading.value = true
@@ -94,19 +76,15 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
         return genreMovie
     }
 
-    fun getTrendingSeries() {
+    fun getTrendingSeries(): MutableState<List<Series>> {
         isLoading.value = true
+        val trendingSeries = mutableStateOf<List<Series>>(listOf())
         viewModelScope.launch {
-            val result = homeRepository.getTrendingSeries()
-            when (result) {
+            when (val result = homeRepository.getTrendingSeries()) {
                 is Resource.Success -> {
                     val series = result.data!!.results
                         .filter { series ->
                             series.poster_path != null
-                        }
-                        .mapIndexed { _, series ->
-                            series.poster_path = getPosterPath(series.poster_path)
-                            series
                         }
                     loadError.value = ""
                     isLoading.value = false
@@ -115,29 +93,24 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
                 is Resource.Error -> {
                     loadError.value = result.message!!
                     isLoading.value = false
-                    Log.i("Rohit", "Trending Error")
                 }
                 is Resource.Loading -> {
                     isLoading.value = true
                 }
             }
         }
+        return trendingSeries
     }
 
     fun getSeriesByGenre(genre: Int): MutableState<List<Series>> {
         isLoading.value = true
         val genreSeries = mutableStateOf<List<Series>>(listOf())
         viewModelScope.launch {
-            val result = homeRepository.getSeriesBasedOnGenre(genre = genre)
-            when (result) {
+            when (val result = homeRepository.getSeriesBasedOnGenre(genre = genre)) {
                 is Resource.Success -> {
                     val series = result.data!!.results
                         .filter { series ->
                             series.poster_path != null
-                        }
-                        .mapIndexed { _, series ->
-                            series.poster_path = getPosterPath(series.poster_path)
-                            series
                         }
                     loadError.value = ""
                     isLoading.value = false
@@ -146,7 +119,6 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
                 is Resource.Error -> {
                     loadError.value = result.message!!
                     isLoading.value = false
-                    Log.i("Rohit", "Genre Error")
                 }
                 is Resource.Loading -> {
                     isLoading.value = true

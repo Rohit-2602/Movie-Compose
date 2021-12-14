@@ -1,7 +1,7 @@
 package com.example.moviecompose.model
 
 data class Series(
-    val backdrop_path: String?,
+    var backdrop_path: String?,
     val first_air_date: String,
     val genre_ids: List<Int>,
     val id: Long,

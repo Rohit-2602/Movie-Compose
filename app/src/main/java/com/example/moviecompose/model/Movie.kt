@@ -2,7 +2,7 @@ package com.example.moviecompose.model
 
 data class Movie(
     val adult: Boolean,
-    val backdrop_path: String?,
+    var backdrop_path: String?,
     val genre_ids: List<Int>,
     val id: Long,
     val original_language: String,

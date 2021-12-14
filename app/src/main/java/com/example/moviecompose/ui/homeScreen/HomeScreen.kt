@@ -11,15 +11,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moviecompose.ui.homeScreen.movieScreen.MovieScreen
 import com.example.moviecompose.ui.homeScreen.myListScreen.MyListScreen
 import com.example.moviecompose.ui.homeScreen.seriesScreen.SeriesScreen
+import com.example.moviecompose.util.Routes.MOVIE_SCREEN_ROUTE
+import com.example.moviecompose.util.Routes.MY_LIST_SCREEN_ROUTE
+import com.example.moviecompose.util.Routes.SERIES_SCREEN_ROUTE
 
 @Composable
 fun HomeScreen(
+    mainNavController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
@@ -31,7 +36,7 @@ fun HomeScreen(
             .background(color = MaterialTheme.colors.background)
             .fillMaxSize()
     ) {
-        val navController = rememberNavController()
+        val homeNavController = rememberNavController()
         Column {
             Row(
                 modifier = Modifier
@@ -41,27 +46,27 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 HomeScreenHeaderItem(text = "Movies", selected = selectedTab == 0) {
-                    navController.navigate("movie_screen")
+                    homeNavController.navigate(MOVIE_SCREEN_ROUTE)
                     viewModel.selectedTab.value = 0
                 }
                 HomeScreenHeaderItem(text = "Series", selected = selectedTab == 1) {
-                    navController.navigate("series_screen")
+                    homeNavController.navigate(SERIES_SCREEN_ROUTE)
                     viewModel.selectedTab.value = 1
                 }
                 HomeScreenHeaderItem(text = "My List", selected = selectedTab == 2) {
-                    navController.navigate("my_list_screen")
+                    homeNavController.navigate(MY_LIST_SCREEN_ROUTE)
                     viewModel.selectedTab.value = 2
                 }
             }
-            NavHost(navController = navController, startDestination = "movie_screen") {
-                composable("movie_screen") {
-                    MovieScreen(navController = navController)
+            NavHost(navController = homeNavController, startDestination = MOVIE_SCREEN_ROUTE) {
+                composable(MOVIE_SCREEN_ROUTE) {
+                    MovieScreen(mainNavController = mainNavController)
                 }
-                composable("my_list_screen") {
-                    MyListScreen(navController = navController)
+                composable(SERIES_SCREEN_ROUTE) {
+                    SeriesScreen(mainNavController = mainNavController)
                 }
-                composable("series_screen") {
-                    SeriesScreen(navController = navController)
+                composable(MY_LIST_SCREEN_ROUTE) {
+                    MyListScreen(navController = mainNavController)
                 }
             }
         }

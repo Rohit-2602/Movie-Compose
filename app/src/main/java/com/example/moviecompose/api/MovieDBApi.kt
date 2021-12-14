@@ -1,9 +1,12 @@
 package com.example.moviecompose.api
 
 import com.example.moviecompose.BuildConfig
+import com.example.moviecompose.model.MovieDetailResponse
 import com.example.moviecompose.model.MovieResponse
+import com.example.moviecompose.model.SeriesDetailResponse
 import com.example.moviecompose.model.SeriesResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieDBApi {
@@ -29,6 +32,12 @@ interface MovieDBApi {
         @Query("with_genres") genre: Int
     ): MovieResponse
 
+    @GET("3/movie/{movieId}")
+    suspend fun getMovieDetails(
+        @Path("movieId") movieId: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+    ): MovieDetailResponse
+
     @GET("3/trending/tv/week")
     suspend fun getTrendingSeries(
         @Query("api_key") apiKey: String = API_KEY,
@@ -41,5 +50,11 @@ interface MovieDBApi {
         @Query("page") page: Int = 1,
         @Query("with_genres") genre: Int
     ): SeriesResponse
+
+    @GET("3/tv/{seriesId}")
+    suspend fun getSeriesDetails(
+        @Path("seriesId") seriesId: Int,
+        @Query("api_key") apiKey: String = API_KEY,
+    ): SeriesDetailResponse
 
 }

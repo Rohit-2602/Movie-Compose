@@ -9,6 +9,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,14 +17,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.moviecompose.model.Series
 import com.example.moviecompose.ui.homeScreen.HomeScreenViewModel
-import com.example.moviecompose.ui.homeScreen.MovieSeriesImage
 import com.example.moviecompose.ui.homeScreen.MoviesSeriesHeader
 import com.example.moviecompose.ui.homeScreen.RetrySection
+import com.example.moviecompose.ui.homeScreen.SeriesImage
 import com.example.moviecompose.util.Constant
 
 @Composable
 fun SeriesScreen(
-    navController: NavController,
+    mainNavController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
 
@@ -44,11 +45,11 @@ fun SeriesScreen(
         if (errorMessage.isEmpty()) {
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
-                    TrendingSeriesList(navController = navController)
+                    TrendingSeriesList(mainNavController = mainNavController)
                 }
                 item {
                     for ((key, value) in Constant.SERIES_GENRE_LIST) {
-                        GenreSeriesList(navController = navController, title = key, genreId = value)
+                        GenreSeriesList(mainNavController = mainNavController, title = key, genreId = value)
                     }
                 }
             }
@@ -58,49 +59,55 @@ fun SeriesScreen(
 
 @Composable
 fun TrendingSeriesList(
-    navController: NavController,
+    mainNavController: NavController,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val trendingSeries by remember {
-        viewModel.trendingSeries
+    val trendingSeries by rememberSaveable {
+        viewModel.getTrendingSeries()
     }
     val isLoading by remember {
         viewModel.isLoading
     }
     if (isLoading) {
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             CircularProgressIndicator()
         }
     } else {
-        SeriesList(navController = navController, title = "Trending", seriesList = trendingSeries)
+        SeriesList(mainNavController = mainNavController, title = "Trending", seriesList = trendingSeries)
     }
 }
 
 @Composable
 fun GenreSeriesList(
-    navController: NavController,
+    mainNavController: NavController,
     title: String,
     genreId: Int,
     viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val genreSeries by remember {
+    val genreSeries by rememberSaveable {
         viewModel.getSeriesByGenre(genre = genreId)
     }
     val isLoading by remember {
         viewModel.isLoading
     }
     if (isLoading) {
-        Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             CircularProgressIndicator()
         }
     } else {
-        SeriesList(navController = navController, title = title, seriesList = genreSeries)
+        SeriesList(mainNavController = mainNavController, title = title, seriesList = genreSeries)
     }
 }
 
 @Composable
 fun SeriesList(
-    navController: NavController,
+    mainNavController: NavController,
     title: String,
     seriesList: List<Series>,
 ) {
@@ -113,7 +120,10 @@ fun SeriesList(
                 seriesList.size
             }
             items(itemCount) {
-                MovieSeriesImage(navController = navController, posterPath = seriesList[it].poster_path)
+                SeriesImage(
+                    mainNavController = mainNavController,
+                    series = seriesList[it]
+                )
             }
         }
     }
