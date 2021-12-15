@@ -2,9 +2,6 @@ package com.example.moviecompose.util
 
 object Constant {
 
-    private const val BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342"
-    private const val BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780"
-
     val MOVIES_GENRE_LIST = hashMapOf(
         "Action" to 28,
         "Adventure" to 12,
@@ -30,8 +27,5 @@ object Constant {
         "Reality" to 10764,
         "Sci-Fic & Fantasy" to 10765,
     )
-
-    fun getPosterPath(posterPath: String?): String = BASE_POSTER_PATH + posterPath
-    fun getBackDropPath(backdropPath: String?): String = BASE_BACKDROP_PATH + backdropPath
 
 }

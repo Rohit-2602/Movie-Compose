@@ -21,9 +21,6 @@ class HomeScreenViewModel @Inject constructor(private val homeRepository: MovieD
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
 
-    fun getPosterPath(posterPath: String?): String =
-        homeRepository.getPosterPath(posterPath)
-
     fun getTrendingMovies(): MutableState<List<Movie>> {
         val trendingMovies = mutableStateOf<List<Movie>>(listOf())
         isLoading.value = true

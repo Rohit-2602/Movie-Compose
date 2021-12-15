@@ -19,7 +19,7 @@ import com.example.moviecompose.ui.homeScreen.myListScreen.MyListScreen
 import com.example.moviecompose.ui.homeScreen.seriesScreen.SeriesScreen
 import com.example.moviecompose.ui.theme.ComposeMovieTheme
 import com.example.moviecompose.util.Routes
-import com.example.moviecompose.util.Routes.HOME_SCREEN_ROUTE
+import com.example.moviecompose.util.Routes.HOME_SCREEN
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,21 +29,21 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeMovieTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = HOME_SCREEN_ROUTE) {
-                    composable(HOME_SCREEN_ROUTE) {
+                NavHost(navController = navController, startDestination = HOME_SCREEN) {
+                    composable(HOME_SCREEN) {
                         HomeScreen(mainNavController = navController)
                     }
-                    composable(Routes.MOVIE_SCREEN_ROUTE) {
+                    composable(Routes.MOVIE_SCREEN) {
                         MovieScreen(mainNavController = navController)
                     }
-                    composable(Routes.SERIES_SCREEN_ROUTE) {
+                    composable(Routes.SERIES_SCREEN) {
                         SeriesScreen(mainNavController = navController)
                     }
-                    composable(Routes.MY_LIST_SCREEN_ROUTE) {
+                    composable(Routes.MY_LIST_SCREEN) {
                         MyListScreen(navController = navController)
                     }
                     composable(
-                        route = "${Routes.MOVIE_DETAIL_SCREEN_ROUTE}/{movieId}",
+                        route = "${Routes.MOVIE_DETAIL_SCREEN}/{movieId}",
                         arguments = listOf(
                             navArgument("movieId") {
                                 type = NavType.IntType
@@ -56,7 +56,7 @@ class MainActivity : ComponentActivity() {
                         MovieDetailScreen(navController = navController, movieId = movieId!!)
                     }
                     composable(
-                        route = "${Routes.SERIES_DETAIL_SCREEN_ROUTE}/{seriesId}",
+                        route = "${Routes.SERIES_DETAIL_SCREEN}/{seriesId}",
                         arguments = listOf(
                             navArgument("seriesId") {
                                 type = NavType.IntType
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
                         SeriesDetailScreen(navController = navController, seriesId = seriesId!!)
                     }
                     composable(
-                        route = "${Routes.GENRE_MOVIE_SCREEN_ROUTE}/{genreId}/{genreTitle}",
+                        route = "${Routes.GENRE_MOVIE_SCREEN}/{genreId}/{genreTitle}",
                         arguments = listOf(
                             navArgument("genreId") {
                                 type = NavType.IntType
@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
                         GenreMovieDetail(mainNavController = navController, genreId = genreId!!, genreTitle = genreTitle!!)
                     }
                     composable(
-                        route = "${Routes.GENRE_SERIES_SCREEN_ROUTE}/{genreId}/{genreTitle}",
+                        route = "${Routes.GENRE_SERIES_SCREEN}/{genreId}/{genreTitle}",
                         arguments = listOf(
                             navArgument("genreId") {
                                 type = NavType.IntType

@@ -16,15 +16,8 @@ import javax.inject.Inject
 class DetailScreenViewModel @Inject constructor(private val movieDBRepository: MovieDBRepository) :
     ViewModel() {
 
-//    val movieDetail = mutableStateOf<MovieDetailResponse?>(null)
-//    val seriesDetail = mutableStateOf<SeriesDetailResponse?>(null)
-
     val isLoading = mutableStateOf(false)
     val errorMessage = mutableStateOf("")
-
-//    fun getPosterPath(posterPath: String?): String = movieDBRepository.getPosterPath(posterPath)
-    fun getBackDropPoster(backDropPoster: String): String =
-        movieDBRepository.getBackDropPath(backDropPoster)
 
     fun getMovieDetails(movieId: Int): MutableState<MovieDetailResponse?> {
         isLoading.value = true

@@ -14,9 +14,15 @@ interface MovieDBApi {
     companion object {
         const val API_KEY = BuildConfig.API_KEY
         const val BASE_URL = "https://api.themoviedb.org/"
+        const val PAGING_SIZE = 20
         private const val YOUTUBE_VIDEO_URL = "https://www.youtube.com/watch?v="
         private const val YOUTUBE_THUMBNAIL_URL = "https://img.youtube.com/vi/"
-        const val PAGING_SIZE = 20
+
+        private const val BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342"
+        private const val BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780"
+        fun getPosterPath(posterPath: String?): String = BASE_POSTER_PATH + posterPath
+        fun getBackDropPath(backdropPath: String?): String = BASE_BACKDROP_PATH + backdropPath
+
     }
 
     @GET("3/trending/movie/week")

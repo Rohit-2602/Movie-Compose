@@ -4,13 +4,9 @@ import com.example.moviecompose.model.MovieDetailResponse
 import com.example.moviecompose.model.MovieResponse
 import com.example.moviecompose.model.SeriesDetailResponse
 import com.example.moviecompose.model.SeriesResponse
-import com.example.moviecompose.util.Constant
 import javax.inject.Inject
 
 class MovieDBRepository @Inject constructor(private val movieDBApi: MovieDBApi) {
-
-    fun getPosterPath(posterPath: String?): String = Constant.getPosterPath(posterPath)
-    fun getBackDropPath(backdropPath: String?): String = Constant.getBackDropPath(backdropPath)
 
     suspend fun getTrendingMovies(page: Int = 1): Resource<MovieResponse> {
         val result = try {

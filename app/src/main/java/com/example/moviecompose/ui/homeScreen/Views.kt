@@ -19,15 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
+import com.example.moviecompose.api.MovieDBApi
 import com.example.moviecompose.model.Movie
 import com.example.moviecompose.model.Series
-import com.example.moviecompose.util.Routes.GENRE_MOVIE_SCREEN_ROUTE
-import com.example.moviecompose.util.Routes.GENRE_SERIES_SCREEN_ROUTE
-import com.example.moviecompose.util.Routes.MOVIE_DETAIL_SCREEN_ROUTE
-import com.example.moviecompose.util.Routes.SERIES_DETAIL_SCREEN_ROUTE
+import com.example.moviecompose.util.Routes.GENRE_MOVIE_SCREEN
+import com.example.moviecompose.util.Routes.GENRE_SERIES_SCREEN
+import com.example.moviecompose.util.Routes.MOVIE_DETAIL_SCREEN
+import com.example.moviecompose.util.Routes.SERIES_DETAIL_SCREEN
 
 @Composable
 fun HomeScreenHeaderItem(text: String, selected: Boolean, onClick: () -> Unit) {
@@ -85,9 +85,9 @@ fun MoviesSeriesHeader(
                 .padding(start = 20.dp, end = 20.dp, top = 10.dp)
                 .clickable {
                     if (isMovie) {
-                        mainNavController.navigate("$GENRE_MOVIE_SCREEN_ROUTE/${genreId}/${title}")
+                        mainNavController.navigate("$GENRE_MOVIE_SCREEN/${genreId}/${title}")
                     } else {
-                        mainNavController.navigate("$GENRE_SERIES_SCREEN_ROUTE/${genreId}/${title}")
+                        mainNavController.navigate("$GENRE_SERIES_SCREEN/${genreId}/${title}")
                     }
                 }
         )
@@ -97,11 +97,10 @@ fun MoviesSeriesHeader(
 @Composable
 fun MovieImage(
     mainNavController: NavController,
-    movie: Movie,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    movie: Movie
 ) {
     val painter = rememberImagePainter(
-        data = viewModel.getPosterPath(movie.poster_path)
+        data = MovieDBApi.getPosterPath(movie.poster_path)
     )
     Column(
         modifier = Modifier
@@ -116,7 +115,7 @@ fun MovieImage(
             modifier = Modifier
                 .size(200.dp)
                 .clickable {
-                    mainNavController.navigate("$MOVIE_DETAIL_SCREEN_ROUTE/${movie.id}")
+                    mainNavController.navigate("$MOVIE_DETAIL_SCREEN/${movie.id}")
                 },
             contentScale = ContentScale.FillWidth
         )
@@ -126,11 +125,10 @@ fun MovieImage(
 @Composable
 fun SeriesImage(
     mainNavController: NavController,
-    series: Series,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    series: Series
 ) {
     val painter = rememberImagePainter(
-        data = viewModel.getPosterPath(series.poster_path)
+        data = MovieDBApi.getPosterPath(series.poster_path)
     )
     Column(
         modifier = Modifier
@@ -145,7 +143,7 @@ fun SeriesImage(
             modifier = Modifier
                 .size(200.dp)
                 .clickable {
-                    mainNavController.navigate("$SERIES_DETAIL_SCREEN_ROUTE/${series.id}")
+                    mainNavController.navigate("$SERIES_DETAIL_SCREEN/${series.id}")
                 },
             contentScale = ContentScale.FillWidth
         )

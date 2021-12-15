@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.moviecompose.api.MovieDBApi
 import com.example.moviecompose.ui.homeScreen.RetrySection
 
 @Composable
@@ -57,7 +58,7 @@ fun SeriesDetailScreen(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
                     val series = seriesDetail!!
-                    BackDropPoster(backDropPoster = viewModel.getBackDropPoster(series.backdrop_path))
+                    BackDropPoster(backDropPoster = MovieDBApi.getBackDropPath(series.backdrop_path), navController = navController)
                     GenreRating(
                         genre = series.genres[0].name,
                         voteAverage = series.vote_average

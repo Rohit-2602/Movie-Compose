@@ -2,6 +2,7 @@ package com.example.moviecompose.ui.genreDetailScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -18,25 +19,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.moviecompose.R
+import com.example.moviecompose.api.MovieDBApi
 import com.example.moviecompose.model.Movie
 import com.example.moviecompose.model.Series
 import com.example.moviecompose.util.Constant
+import com.example.moviecompose.util.Routes
 
 @Composable
 fun MovieList(
     mainNavController: NavController,
     index: Int,
     movieList: List<Movie>,
-    genreList: List<Int>,
-    viewModel: GenreDetailViewModel = hiltViewModel()
+    genreList: List<Int>
 ) {
 
     val movie = movieList[index]
-    val posterPath = viewModel.getPosterPath(movie.poster_path)
+    val posterPath = MovieDBApi.getPosterPath(movie.poster_path)
 
     Row(
         modifier = Modifier
@@ -45,6 +46,9 @@ fun MovieList(
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
             .background(color = MaterialTheme.colors.background)
+            .clickable {
+                mainNavController.navigate("${Routes.MOVIE_DETAIL_SCREEN}/${movie.id}")
+            }
     ) {
         PosterImage(posterPath = posterPath)
         Column(modifier = Modifier.height(150.dp)) {
@@ -59,12 +63,11 @@ fun SeriesList(
     mainNavController: NavController,
     index: Int,
     seriesList: List<Series>,
-    genreList: List<Int>,
-    viewModel: GenreDetailViewModel = hiltViewModel()
+    genreList: List<Int>
 ) {
 
     val series = seriesList[index]
-    val posterPath = viewModel.getPosterPath(series.poster_path)
+    val posterPath = MovieDBApi.getPosterPath(series.poster_path)
 
     Row(
         modifier = Modifier
@@ -73,6 +76,9 @@ fun SeriesList(
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
             .background(color = MaterialTheme.colors.background)
+            .clickable {
+                mainNavController.navigate("${Routes.SERIES_DETAIL_SCREEN}/${series.id}")
+            }
     ) {
         PosterImage(posterPath = posterPath)
         Column(modifier = Modifier.height(150.dp)) {

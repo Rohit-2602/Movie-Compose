@@ -2,6 +2,7 @@ package com.example.moviecompose.ui.detailScreen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -17,11 +18,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.moviecompose.R
 
 @Composable
-fun BackDropPoster(backDropPoster: String) {
+fun BackDropPoster(navController: NavController, backDropPoster: String) {
 
     val backArrow = rememberImagePainter(R.drawable.ic_back)
     val moviePoster = rememberImagePainter(
@@ -48,6 +50,9 @@ fun BackDropPoster(backDropPoster: String) {
                 .background(color = MaterialTheme.colors.background)
                 .size(30.dp)
                 .padding(5.dp)
+                .clickable {
+                    navController.navigateUp()
+                }
         )
     }
 }

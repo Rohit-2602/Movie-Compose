@@ -22,9 +22,6 @@ class GenreDetailViewModel @Inject constructor(private val movieDBRepository: Mo
     private var currentPage = 1
     val endReached = mutableStateOf(false)
 
-    fun getPosterPath(posterPath: String?): String =
-        movieDBRepository.getPosterPath(posterPath)
-
     private val movieList = mutableStateOf<List<Movie>>(listOf())
     fun getMovies(genreId: Int): MutableState<List<Movie>> {
         viewModelScope.launch {
