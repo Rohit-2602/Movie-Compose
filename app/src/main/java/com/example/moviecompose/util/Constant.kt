@@ -1,31 +1,33 @@
 package com.example.moviecompose.util
 
+import com.example.moviecompose.model.Genre
+
 object Constant {
 
-    val MOVIES_GENRE_LIST = hashMapOf(
-        "Action" to 28,
-        "Adventure" to 12,
-        "Animation" to 16,
-        "Comedy" to 35,
-        "Drama" to 18,
-        "Family" to 10751,
-        "Fantasy" to 14,
-        "Mystery" to 9648,
-        "Sci-Fic" to 878,
-        "Thriller" to 53,
+    val MOVIES_GENRE_LIST = listOf(
+        Genre(16, "Animation"),
+        Genre(28, "Action"),
+        Genre(14, "Fantasy"),
+        Genre(10751, "Family"),
+        Genre(12, "Adventure"),
+        Genre(9648, "Mystery"),
+        Genre(35, "Comedy"),
+        Genre(878, "Sci-Fic"),
+        Genre(53, "Thriller"),
+        Genre(18, "Drama")
     )
 
-    val SERIES_GENRE_LIST = hashMapOf(
-        "Action & Adventure" to 10759,
-        "Animation" to 16,
-        "Comedy" to 35,
-        "Crime" to 80,
-        "Documentary" to 99,
-        "Drama" to 18,
-        "Family" to 10751,
-        "Mystery" to 9648,
-        "Reality" to 10764,
-        "Sci-Fic & Fantasy" to 10765,
+    val SERIES_GENRE_LIST = listOf(
+        Genre(10765, "Sci-Fic & Fantasy"),
+        Genre(10759, "Action & Adventure"),
+        Genre(16, "Animation"),
+        Genre(80, "Crime"),
+        Genre(9648, "Mystery"),
+        Genre(18, "Drama"),
+        Genre(99, "Documentary"),
+        Genre(35, "Comedy"),
+        Genre(10751, "Family"),
+        Genre(10764, "Reality")
     )
 
 }

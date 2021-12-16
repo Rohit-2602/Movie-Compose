@@ -9,14 +9,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.moviecompose.ui.detailScreen.MovieDetailScreen
-import com.example.moviecompose.ui.detailScreen.SeriesDetailScreen
-import com.example.moviecompose.ui.genreDetailScreen.GenreMovieDetail
-import com.example.moviecompose.ui.genreDetailScreen.GenreSeriesDetail
 import com.example.moviecompose.ui.homeScreen.HomeScreen
-import com.example.moviecompose.ui.homeScreen.movieScreen.MovieScreen
-import com.example.moviecompose.ui.homeScreen.myListScreen.MyListScreen
-import com.example.moviecompose.ui.homeScreen.seriesScreen.SeriesScreen
+import com.example.moviecompose.ui.movie.GenreMovieDetail
+import com.example.moviecompose.ui.movie.MovieDetailScreen
+import com.example.moviecompose.ui.series.GenreSeriesDetail
+import com.example.moviecompose.ui.series.SeriesDetailScreen
 import com.example.moviecompose.ui.theme.ComposeMovieTheme
 import com.example.moviecompose.util.Routes
 import com.example.moviecompose.util.Routes.HOME_SCREEN
@@ -32,15 +29,6 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = HOME_SCREEN) {
                     composable(HOME_SCREEN) {
                         HomeScreen(mainNavController = navController)
-                    }
-                    composable(Routes.MOVIE_SCREEN) {
-                        MovieScreen(mainNavController = navController)
-                    }
-                    composable(Routes.SERIES_SCREEN) {
-                        SeriesScreen(mainNavController = navController)
-                    }
-                    composable(Routes.MY_LIST_SCREEN) {
-                        MyListScreen(navController = navController)
                     }
                     composable(
                         route = "${Routes.MOVIE_DETAIL_SCREEN}/{movieId}",

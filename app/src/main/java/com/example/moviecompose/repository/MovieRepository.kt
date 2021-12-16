@@ -1,16 +1,17 @@
-package com.example.moviecompose.api
+package com.example.moviecompose.repository
 
 import com.example.moviecompose.model.MovieDetailResponse
 import com.example.moviecompose.model.MovieResponse
-import com.example.moviecompose.model.SeriesDetailResponse
-import com.example.moviecompose.model.SeriesResponse
+import com.example.moviecompose.model.VideoResponse
+import com.example.moviecompose.network.Resource
+import com.example.moviecompose.network.service.MovieService
 import javax.inject.Inject
 
-class MovieDBRepository @Inject constructor(private val movieDBApi: MovieDBApi) {
+class MovieRepository @Inject constructor(private val movieService: MovieService) {
 
     suspend fun getTrendingMovies(page: Int = 1): Resource<MovieResponse> {
         val result = try {
-            movieDBApi.getTrendingMovies(page = page)
+            movieService.getTrendingMovies(page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
@@ -19,7 +20,7 @@ class MovieDBRepository @Inject constructor(private val movieDBApi: MovieDBApi) 
 
     suspend fun getMoviesBasedOnGenre(genre: Int, page: Int = 1): Resource<MovieResponse> {
         val result = try {
-            movieDBApi.getMoviesBasedOnGenre(genre = genre, page = page)
+            movieService.getMoviesBasedOnGenre(genre = genre, page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
@@ -28,34 +29,25 @@ class MovieDBRepository @Inject constructor(private val movieDBApi: MovieDBApi) 
 
     suspend fun getMovieDetails(movieId: Int): Resource<MovieDetailResponse> {
         val result = try {
-            movieDBApi.getMovieDetails(movieId = movieId)
+            movieService.getMovieDetails(movieId = movieId)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
         return Resource.Success(result)
     }
 
-    suspend fun getTrendingSeries(page: Int = 1): Resource<SeriesResponse> {
+    suspend fun getMovieRecommendation(movieId: Int): Resource<MovieResponse> {
         val result = try {
-            movieDBApi.getTrendingSeries(page = page)
+            movieService.getMovieRecommendations(movieId = movieId)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
         return Resource.Success(result)
     }
 
-    suspend fun getSeriesBasedOnGenre(genre: Int, page: Int = 1): Resource<SeriesResponse> {
+    suspend fun getMovieVideos(movieId: Int): Resource<VideoResponse> {
         val result = try {
-            movieDBApi.getSeriesBasedOnGenre(genre = genre, page = page)
-        } catch (exception: Exception) {
-            return Resource.Error(message = exception.message!!.toString())
-        }
-        return Resource.Success(result)
-    }
-
-    suspend fun getSeriesDetails(seriesId: Int): Resource<SeriesDetailResponse> {
-        val result = try {
-            movieDBApi.getSeriesDetails(seriesId = seriesId)
+            movieService.getMovieVideos(movieId = movieId)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }

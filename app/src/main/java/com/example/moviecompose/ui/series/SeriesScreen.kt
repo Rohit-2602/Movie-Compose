@@ -1,4 +1,4 @@
-package com.example.moviecompose.ui.homeScreen.seriesScreen
+package com.example.moviecompose.ui.series
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,16 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.moviecompose.model.Series
-import com.example.moviecompose.ui.homeScreen.HomeScreenViewModel
-import com.example.moviecompose.ui.homeScreen.MoviesSeriesHeader
-import com.example.moviecompose.ui.homeScreen.RetrySection
-import com.example.moviecompose.ui.homeScreen.SeriesImage
+import com.example.moviecompose.ui.MoviesSeriesHeader
+import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.util.Constant
 
 @Composable
 fun SeriesScreen(
     mainNavController: NavController,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: SeriesViewModel = hiltViewModel()
 ) {
 
     val trendingSeries by rememberSaveable {
@@ -67,11 +64,11 @@ fun SeriesScreen(
                     )
                 }
                 item {
-                    for ((key, value) in Constant.SERIES_GENRE_LIST) {
+                    for (genre in Constant.SERIES_GENRE_LIST) {
                         GenreSeriesList(
                             mainNavController = mainNavController,
-                            title = key,
-                            genreId = value
+                            title = genre.name,
+                            genreId = genre.id
                         )
                     }
                 }
@@ -85,12 +82,18 @@ fun TrendingSeriesList(
     mainNavController: NavController,
     trendingSeries: List<Series>
 ) {
-    SeriesList(
-        mainNavController = mainNavController,
-        title = "Trending",
-        seriesList = trendingSeries,
-        genreId = 0
-    )
+    Column {
+        MoviesSeriesHeader(
+            mainNavController = mainNavController,
+            title = "Trending",
+            isMovie = false,
+            genreId = 0
+        )
+        SeriesRowList(
+            mainNavController = mainNavController,
+            seriesList = trendingSeries
+        )
+    }
 }
 
 @Composable
@@ -98,40 +101,21 @@ fun GenreSeriesList(
     mainNavController: NavController,
     title: String,
     genreId: Int,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    viewModel: SeriesViewModel = hiltViewModel(),
 ) {
     val genreSeries by rememberSaveable {
         viewModel.getSeriesByGenre(genre = genreId)
     }
-    SeriesList(
-        mainNavController = mainNavController,
-        title = title,
-        seriesList = genreSeries,
-        genreId = genreId
-    )
-}
-
-@Composable
-fun SeriesList(
-    mainNavController: NavController,
-    title: String,
-    genreId: Int,
-    seriesList: List<Series>,
-) {
     Column {
-        MoviesSeriesHeader(mainNavController = mainNavController, title = title, genreId = genreId, isMovie = false)
-        LazyRow(modifier = Modifier.padding(end = 10.dp, top = 10.dp)) {
-            val itemCount = if (seriesList.size > 10) {
-                10
-            } else {
-                seriesList.size
-            }
-            items(itemCount) {
-                SeriesImage(
-                    mainNavController = mainNavController,
-                    series = seriesList[it]
-                )
-            }
-        }
+        MoviesSeriesHeader(
+            mainNavController = mainNavController,
+            title = title,
+            isMovie = false,
+            genreId = genreId
+        )
+        SeriesRowList(
+            mainNavController = mainNavController,
+            seriesList = genreSeries
+        )
     }
 }

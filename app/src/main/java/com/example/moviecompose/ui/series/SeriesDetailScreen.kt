@@ -1,8 +1,7 @@
-package com.example.moviecompose.ui.detailScreen
+package com.example.moviecompose.ui.series
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
@@ -15,18 +14,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.moviecompose.api.MovieDBApi
-import com.example.moviecompose.ui.homeScreen.RetrySection
+import com.example.moviecompose.network.MovieDBApi
+import com.example.moviecompose.ui.BackDropPoster
+import com.example.moviecompose.ui.GenreRatingDetail
+import com.example.moviecompose.ui.RetrySection
+import com.example.moviecompose.ui.TitleDescriptionDetail
 
 @Composable
-fun MovieDetailScreen(
+fun SeriesDetailScreen(
     navController: NavController,
-    movieId: Int,
-    viewModel: DetailScreenViewModel = hiltViewModel()
+    seriesId: Int,
+    viewModel: SeriesViewModel = hiltViewModel()
 ) {
 
-    val movieDetails by remember {
-        viewModel.getMovieDetails(movieId = movieId)
+    val seriesDetail by remember {
+        viewModel.getSeriesDetails(seriesId = seriesId)
     }
 
     val isLoading by remember {
@@ -34,7 +36,7 @@ fun MovieDetailScreen(
     }
 
     val errorMessage by remember {
-        viewModel.errorMessage
+        viewModel.loadError
     }
 
     Surface(
@@ -52,22 +54,23 @@ fun MovieDetailScreen(
         }
         if (errorMessage.isNotEmpty()) {
             RetrySection(error = errorMessage) {
-                viewModel.getMovieDetails(movieId = movieId)
+                viewModel.getSeriesDetails(seriesId = seriesId)
             }
         }
-        if (!isLoading && errorMessage.isEmpty()) {
+        if (!isLoading && errorMessage.isEmpty() && seriesDetail != null) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
-                    val movie = movieDetails!!
-                    BackDropPoster(backDropPoster = MovieDBApi.getBackDropPath(movie.backdrop_path), navController = navController)
-                    Row {
-                        GenreRating(genre = movie.genres[0].name, voteAverage = movie.vote_average)
-                        MovieRunTime(runTime = movie.runtime)
-                    }
-                    Title(movieTitle = movie.original_title, movieDescription = movie.overview)
+                    BackDropPoster(backDropPoster = MovieDBApi.getBackDropPath(seriesDetail!!.backdrop_path), navController = navController)
+                    GenreRatingDetail(
+                        genre = seriesDetail!!.genres[0].name,
+                        voteAverage = seriesDetail!!.vote_average.toString()
+                    )
+                    TitleDescriptionDetail(
+                        title = seriesDetail!!.name,
+                        description = seriesDetail!!.overview
+                    )
                 }
             }
         }
     }
-
 }

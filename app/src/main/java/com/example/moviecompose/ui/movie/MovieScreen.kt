@@ -1,4 +1,4 @@
-package com.example.moviecompose.ui.homeScreen.movieScreen
+package com.example.moviecompose.ui.movie
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,16 +18,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.moviecompose.model.Movie
-import com.example.moviecompose.ui.homeScreen.HomeScreenViewModel
-import com.example.moviecompose.ui.homeScreen.MovieImage
-import com.example.moviecompose.ui.homeScreen.MoviesSeriesHeader
-import com.example.moviecompose.ui.homeScreen.RetrySection
+import com.example.moviecompose.ui.MoviesSeriesHeader
+import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.util.Constant
 
 @Composable
 fun MovieScreen(
     mainNavController: NavController,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: MovieViewModel = hiltViewModel()
 ) {
 
     val trendingMovies by rememberSaveable {
@@ -67,11 +64,10 @@ fun MovieScreen(
                     )
                 }
                 item {
-                    for ((key, value) in Constant.MOVIES_GENRE_LIST) {
+                    for (genre in Constant.MOVIES_GENRE_LIST) {
                         GenreMovieList(
                             mainNavController = mainNavController,
-                            title = key,
-                            genreId = value
+                            title = genre.name, genreId = genre.id
                         )
                     }
                 }
@@ -85,12 +81,16 @@ fun TrendingMovieList(
     mainNavController: NavController,
     trendingMovies: List<Movie>
 ) {
-    MovieList(
-        mainNavController = mainNavController,
-        title = "Trending",
-        movieList = trendingMovies,
-        genreId = 0
-    )
+    Column {
+        MoviesSeriesHeader(
+            mainNavController = mainNavController,
+            title = "Trending", isMovie = true, genreId = 0
+        )
+        MovieRowList(
+            mainNavController = mainNavController,
+            movieList = trendingMovies
+        )
+    }
 }
 
 @Composable
@@ -98,40 +98,19 @@ fun GenreMovieList(
     mainNavController: NavController,
     title: String,
     genreId: Int,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    viewModel: MovieViewModel = hiltViewModel(),
 ) {
     val genreMovies by rememberSaveable {
         viewModel.getMoviesByGenre(genre = genreId)
     }
-    MovieList(
-        mainNavController = mainNavController,
-        title = title,
-        movieList = genreMovies,
-        genreId = genreId
-    )
-}
-
-@Composable
-fun MovieList(
-    mainNavController: NavController,
-    title: String,
-    genreId: Int,
-    movieList: List<Movie>,
-) {
     Column {
-        MoviesSeriesHeader(mainNavController = mainNavController, title = title, isMovie = true, genreId = genreId)
-        LazyRow(modifier = Modifier.padding(end = 10.dp, top = 10.dp)) {
-            val itemCount = if (movieList.size > 10) {
-                10
-            } else {
-                movieList.size
-            }
-            items(itemCount) {
-                MovieImage(
-                    mainNavController = mainNavController,
-                    movie = movieList[it]
-                )
-            }
-        }
+        MoviesSeriesHeader(
+            mainNavController = mainNavController,
+            title = title, isMovie = true, genreId = genreId
+        )
+        MovieRowList(
+            mainNavController = mainNavController,
+            movieList = genreMovies
+        )
     }
 }
