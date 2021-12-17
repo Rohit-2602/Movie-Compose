@@ -13,6 +13,7 @@ import com.example.moviecompose.ui.homeScreen.HomeScreen
 import com.example.moviecompose.ui.movie.GenreMovieDetail
 import com.example.moviecompose.ui.movie.MovieDetailScreen
 import com.example.moviecompose.ui.series.GenreSeriesDetail
+import com.example.moviecompose.ui.series.SeasonDetailScreen
 import com.example.moviecompose.ui.series.SeriesDetailScreen
 import com.example.moviecompose.ui.theme.ComposeMovieTheme
 import com.example.moviecompose.util.Routes
@@ -93,6 +94,31 @@ class MainActivity : ComponentActivity() {
                             it.arguments?.getString("genreTitle")
                         }
                         GenreSeriesDetail(mainNavController = navController, genreId = genreId!!, genreTitle = genreTitle!!)
+                    }
+                    composable(
+                        route = "${Routes.SEASON_DETAIL_SCREEN}/{seriesId}/{seasonNumber}/{seasonName}",
+                        arguments = listOf(
+                            navArgument("seriesId") {
+                                type = NavType.IntType
+                            },
+                            navArgument("seasonNumber") {
+                                type = NavType.IntType
+                            },
+                            navArgument("seasonName") {
+                                type = NavType.StringType
+                            }
+                        )
+                    ) {
+                        val seriesId = remember {
+                            it.arguments?.getInt("seriesId")
+                        }
+                        val seasonNumber = remember {
+                            it.arguments?.getInt("seasonNumber")
+                        }
+                        val seasonName = remember {
+                            it.arguments?.getString("seasonName")
+                        }
+                        SeasonDetailScreen(seriesId = seriesId!!, seasonNumber = seasonNumber!!, seriesName = seasonName!!)
                     }
                 }
             }

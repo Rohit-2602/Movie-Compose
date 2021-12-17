@@ -1,5 +1,6 @@
 package com.example.moviecompose.repository
 
+import com.example.moviecompose.model.CastResponse
 import com.example.moviecompose.model.MovieDetailResponse
 import com.example.moviecompose.model.MovieResponse
 import com.example.moviecompose.model.VideoResponse
@@ -30,6 +31,15 @@ class MovieRepository @Inject constructor(private val movieService: MovieService
     suspend fun getMovieDetails(movieId: Int): Resource<MovieDetailResponse> {
         val result = try {
             movieService.getMovieDetails(movieId = movieId)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getMovieCast(movieId: Int): Resource<CastResponse> {
+        val result = try {
+            movieService.getMovieCast(movieId = movieId)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }

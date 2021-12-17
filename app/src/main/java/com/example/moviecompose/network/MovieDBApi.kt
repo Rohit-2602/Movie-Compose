@@ -15,6 +15,8 @@ object MovieDBApi {
 
     private const val BASE_POSTER_PATH = "https://image.tmdb.org/t/p/w342"
     private const val BASE_BACKDROP_PATH = "https://image.tmdb.org/t/p/w780"
+    private const val PROFILE_IMAGE_URL = "https://image.tmdb.org/t/p/w185"
     fun getPosterPath(posterPath: String?): String = BASE_POSTER_PATH + posterPath
     fun getBackDropPath(backdropPath: String?): String = BASE_BACKDROP_PATH + backdropPath
+    fun getProfileImage(profileImage: String?): String = PROFILE_IMAGE_URL + profileImage
 }

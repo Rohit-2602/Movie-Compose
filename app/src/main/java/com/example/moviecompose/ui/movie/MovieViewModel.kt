@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.moviecompose.model.Cast
 import com.example.moviecompose.model.Movie
 import com.example.moviecompose.model.MovieDetailResponse
 import com.example.moviecompose.model.Video
@@ -70,7 +71,7 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
     }
 
     private val movieList = mutableStateOf<List<Movie>>(listOf())
-    fun getMovies(genreId: Int): MutableState<List<Movie>> {
+    fun getPaginatedMovies(genreId: Int): MutableState<List<Movie>> {
         viewModelScope.launch {
             isLoading.value = true
             val result = if (genreId == 0) {
@@ -124,6 +125,30 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
         return movieDetail
     }
 
+    fun getMovieCast(movieId: Int): MutableState<List<Cast>> {
+        isLoading.value = true
+        val movieCast = mutableStateOf<List<Cast>>(listOf())
+        viewModelScope.launch {
+            when(val result = movieRepository.getMovieCast(movieId = movieId)) {
+                is Resource.Success -> {
+                    isLoading.value = false
+                    loadError.value = ""
+                    movieCast.value = result.data!!.cast.filter { cast ->
+                        cast.profile_path != null
+                    }
+                }
+                is Resource.Error -> {
+                    loadError.value = result.message!!
+                    isLoading.value = false
+                }
+                is Resource.Loading -> {
+                    isLoading.value = true
+                }
+            }
+        }
+        return movieCast
+    }
+
     fun getMovieRecommendation(movieId: Int): MutableState<List<Movie>> {
         isLoading.value = true
         val recommendation = mutableStateOf<List<Movie>>(listOf())
@@ -170,5 +195,4 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
         }
         return trailers
     }
-
 }

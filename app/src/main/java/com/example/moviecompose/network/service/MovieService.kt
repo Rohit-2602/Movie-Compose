@@ -1,5 +1,6 @@
 package com.example.moviecompose.network.service
 
+import com.example.moviecompose.model.CastResponse
 import com.example.moviecompose.model.MovieDetailResponse
 import com.example.moviecompose.model.MovieResponse
 import com.example.moviecompose.model.VideoResponse
@@ -20,6 +21,9 @@ interface MovieService {
 
     @GET("3/movie/{movieId}")
     suspend fun getMovieDetails(@Path("movieId") movieId: Int): MovieDetailResponse
+
+    @GET("3/movie/{movieId}/credits")
+    suspend fun getMovieCast(@Path("movieId") movieId: Int): CastResponse
 
     @GET("3/movie/{movieId}/recommendations")
     suspend fun getMovieRecommendations(@Path("movieId") movieId: Int): MovieResponse

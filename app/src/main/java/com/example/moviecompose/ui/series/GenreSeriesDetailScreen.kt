@@ -40,7 +40,7 @@ fun GenreSeriesDetail(
 ) {
 
     val seriesList by rememberSaveable {
-        viewModel.getSeries(genreId = genreId)
+        viewModel.getPaginatedSeries(genreId = genreId)
     }
 
     val isLoading by remember {
@@ -62,7 +62,7 @@ fun GenreSeriesDetail(
     ) {
         if (errorMessage.isNotEmpty()) {
             RetrySection(error = errorMessage) {
-                viewModel.getSeries(genreId = genreId)
+                viewModel.getPaginatedSeries(genreId = genreId)
             }
         }
         if (errorMessage.isEmpty()) {
@@ -80,7 +80,7 @@ fun GenreSeriesDetail(
                 }
                 items(seriesList.size) {
                     if (it >= seriesList.size - 1 && !endReached && !isLoading) {
-                        viewModel.getSeries(genreId)
+                        viewModel.getPaginatedSeries(genreId)
                     }
                     SeriesList(
                         mainNavController = mainNavController,

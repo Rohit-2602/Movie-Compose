@@ -1,7 +1,6 @@
 package com.example.moviecompose.network.service
 
-import com.example.moviecompose.model.SeriesDetailResponse
-import com.example.moviecompose.model.SeriesResponse
+import com.example.moviecompose.model.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -19,5 +18,20 @@ interface SeriesService {
 
     @GET("3/tv/{seriesId}")
     suspend fun getSeriesDetails(@Path("seriesId") seriesId: Int): SeriesDetailResponse
+
+    @GET("3/tv/{seriesId}/credits")
+    suspend fun getSeriesCast(@Path("seriesId") seriesId: Int): CastResponse
+
+    @GET("3/tv/{seriesId}/recommendations")
+    suspend fun getSeriesRecommendations(@Path("seriesId") seriesId: Int): SeriesResponse
+
+    @GET("3/tv/{seriesId}/videos")
+    suspend fun getSeriesVideos(@Path("seriesId") seriesId: Int): VideoResponse
+
+    @GET("3/tv/{seriesId}/season/{season_number}")
+    suspend fun getSeasonDetails(
+        @Path("seriesId") seriesId: Int,
+        @Path("season_number") seasonNumber: Int
+    ): SeasonResponse
 
 }

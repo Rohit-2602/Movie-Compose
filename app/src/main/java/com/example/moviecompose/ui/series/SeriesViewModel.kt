@@ -4,8 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviecompose.model.Series
-import com.example.moviecompose.model.SeriesDetailResponse
+import com.example.moviecompose.model.*
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,8 +67,8 @@ class SeriesViewModel @Inject constructor(private val seriesRepository: SeriesRe
         return genreSeries
     }
 
-    fun getSeries(genreId: Int): MutableState<List<Series>> {
-        val seriesList = mutableStateOf<List<Series>>(listOf())
+    private val seriesList = mutableStateOf<List<Series>>(listOf())
+    fun getPaginatedSeries(genreId: Int): MutableState<List<Series>> {
         viewModelScope.launch {
             isLoading.value = true
             val result = if (genreId == 0) {
@@ -81,8 +80,8 @@ class SeriesViewModel @Inject constructor(private val seriesRepository: SeriesRe
                 is Resource.Success -> {
                     endReached.value = currentPage >= result.data!!.total_pages
                     val series = result.data.results
-                        .filter { movie ->
-                            movie.poster_path != null
+                        .filter { series ->
+                            series.poster_path != null
                         }
                     currentPage++
                     loadError.value = ""
@@ -121,6 +120,99 @@ class SeriesViewModel @Inject constructor(private val seriesRepository: SeriesRe
             }
         }
         return seriesDetail
+    }
+
+    fun getSeriesCast(seriesId: Int): MutableState<List<Cast>> {
+        isLoading.value = true
+        val seriesCast = mutableStateOf<List<Cast>>(listOf())
+        viewModelScope.launch {
+            when(val result = seriesRepository.getSeriesCast(seriesId = seriesId)) {
+                is Resource.Success -> {
+                    isLoading.value = false
+                    loadError.value = ""
+                    seriesCast.value = result.data!!.cast.filter { cast ->
+                        cast.profile_path != null
+                    }
+                }
+                is Resource.Error -> {
+                    loadError.value = result.message!!
+                    isLoading.value = false
+                }
+                is Resource.Loading -> {
+                    isLoading.value = true
+                }
+            }
+        }
+        return seriesCast
+    }
+
+    fun getSeriesRecommendation(seriesId: Int): MutableState<List<Series>> {
+        isLoading.value = true
+        val recommendation = mutableStateOf<List<Series>>(listOf())
+        viewModelScope.launch {
+            when(val result = seriesRepository.getSeriesRecommendation(seriesId = seriesId)) {
+                is Resource.Success -> {
+                    isLoading.value = false
+                    loadError.value = ""
+                    recommendation.value = result.data!!.results
+                }
+                is Resource.Error -> {
+                    loadError.value = result.message!!
+                    isLoading.value = false
+                }
+                is Resource.Loading -> {
+                    isLoading.value = true
+                }
+            }
+        }
+        return recommendation
+    }
+
+    fun getSeasonDetails(seriesId: Int, seasonNumber: Int): MutableState<SeasonResponse?> {
+        isLoading.value = true
+        val seasonDetail = mutableStateOf<SeasonResponse?>(null)
+        viewModelScope.launch {
+            when(val result = seriesRepository.getSeasonDetail(seriesId = seriesId, seasonNumber = seasonNumber)) {
+                is Resource.Success -> {
+                    isLoading.value = false
+                    loadError.value = ""
+                    seasonDetail.value = result.data!!
+                }
+                is Resource.Error -> {
+                    loadError.value = result.message!!
+                    isLoading.value = false
+                }
+                is Resource.Loading -> {
+                    isLoading.value = true
+                }
+            }
+        }
+        return seasonDetail
+    }
+
+    fun getSeriesTrailers(seriesId: Int): MutableState<List<Video>> {
+        isLoading.value = true
+        val trailers = mutableStateOf<List<Video>>(listOf())
+        viewModelScope.launch {
+            when(val result = seriesRepository.getSeriesVideos(seriesId = seriesId)) {
+                is Resource.Success -> {
+                    trailers.value = result.data!!.results
+                        .filter { video ->
+                            video.type == "Trailer"
+                        }
+                    isLoading.value = false
+                    loadError.value = ""
+                }
+                is Resource.Error -> {
+                    loadError.value = result.message!!
+                    isLoading.value = false
+                }
+                is Resource.Loading -> {
+                    isLoading.value = true
+                }
+            }
+        }
+        return trailers
     }
 
 }

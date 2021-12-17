@@ -33,6 +33,10 @@ fun MovieDetailScreen(
         viewModel.getMovieDetails(movieId = movieId)
     }
 
+    val castList by remember {
+        viewModel.getMovieCast(movieId = movieId)
+    }
+
     val trailerList by remember {
         viewModel.getMovieTrailers(movieId = movieId)
     }
@@ -70,20 +74,40 @@ fun MovieDetailScreen(
         if (!isLoading && errorMessage.isEmpty() && movieDetails != null) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
-                    BackDropPoster(backDropPoster = MovieDBApi.getBackDropPath(movieDetails!!.backdrop_path), navController = navController)
+                    BackDropPoster(
+                        backDropPoster = MovieDBApi.getBackDropPath(movieDetails!!.backdrop_path),
+                        navController = navController,
+                        isFavourite = false
+                    )
                     Row {
-                        GenreRatingDetail(genre = movieDetails!!.genres[0].name, voteAverage = movieDetails!!.vote_average.toString())
+                        GenreRatingDetail(
+                            genre = movieDetails!!.genres[0].name,
+                            voteAverage = movieDetails!!.vote_average.toString()
+                        )
                         MovieRunTime(runTime = movieDetails!!.runtime)
                     }
-                    TitleDescriptionDetail(title = movieDetails!!.original_title, description = movieDetails!!.overview)
-                    Trailers(trailers = trailerList)
+                    TitleDescriptionDetail(
+                        title = movieDetails!!.original_title,
+                        description = movieDetails!!.overview
+                    )
+                    if (trailerList.isNotEmpty()) {
+                        Trailers(trailers = trailerList)
+                    }
+                    CastList(castList = castList)
                     Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
                         Text(
                             text = "Recommendations",
-                            style = TextStyle(color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold),
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
                             modifier = Modifier.padding(start = 10.dp)
                         )
-                        MovieRowList(mainNavController = navController, movieList = movieRecommendation)
+                        MovieRowList(
+                            mainNavController = navController,
+                            movieList = movieRecommendation
+                        )
                     }
                 }
             }

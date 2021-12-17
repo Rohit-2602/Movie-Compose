@@ -77,18 +77,14 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
-    // Moshi
-    implementation 'com.squareup.moshi:moshi:1.8.0'
-    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
-
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
 
     // Coroutine Lifecycle Scopes
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
+//    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
     // Coil
     implementation "io.coil-kt:coil-compose:1.4.0"

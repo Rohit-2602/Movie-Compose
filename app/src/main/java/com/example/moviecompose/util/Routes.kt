@@ -10,5 +10,6 @@ object Routes {
     const val GENRE_MOVIE_SCREEN = "genre_movie_screen"
     const val SERIES_DETAIL_SCREEN = "series_detail_screen"
     const val GENRE_SERIES_SCREEN = "genre_series_screen"
+    const val SEASON_DETAIL_SCREEN = "season_detail_screen"
 
 }

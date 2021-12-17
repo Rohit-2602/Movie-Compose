@@ -1,7 +1,6 @@
 package com.example.moviecompose.repository
 
-import com.example.moviecompose.model.SeriesDetailResponse
-import com.example.moviecompose.model.SeriesResponse
+import com.example.moviecompose.model.*
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.network.service.SeriesService
 import javax.inject.Inject
@@ -29,6 +28,42 @@ class SeriesRepository @Inject constructor(private val seriesService: SeriesServ
     suspend fun getSeriesDetails(seriesId: Int): Resource<SeriesDetailResponse> {
         val result = try {
             seriesService.getSeriesDetails(seriesId = seriesId)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getSeriesCast(seriesId: Int): Resource<CastResponse> {
+        val result = try {
+            seriesService.getSeriesCast(seriesId = seriesId)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getSeriesRecommendation(seriesId: Int): Resource<SeriesResponse> {
+        val result = try {
+            seriesService.getSeriesRecommendations(seriesId = seriesId)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getSeasonDetail(seriesId: Int, seasonNumber: Int): Resource<SeasonResponse> {
+        val result = try {
+            seriesService.getSeasonDetails(seriesId = seriesId, seasonNumber = seasonNumber)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getSeriesVideos(seriesId: Int): Resource<VideoResponse> {
+        val result = try {
+            seriesService.getSeriesVideos(seriesId = seriesId)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.moviecompose.R
+import com.example.moviecompose.model.Cast
 import com.example.moviecompose.model.Video
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.util.Routes
@@ -83,8 +84,13 @@ fun MoviesSeriesHeader(
 }
 
 @Composable
-fun BackDropPoster(navController: NavController, backDropPoster: String) {
+fun BackDropPoster(navController: NavController, backDropPoster: String, isFavourite: Boolean) {
     val backArrow = rememberImagePainter(R.drawable.ic_back)
+    val likeButton = if (isFavourite) {
+        rememberImagePainter(R.drawable.ic_favorite)
+    } else {
+        rememberImagePainter(R.drawable.ic_not_favorite)
+    }
     val moviePoster = rememberImagePainter(
         data = backDropPoster,
         builder = {
@@ -109,23 +115,37 @@ fun BackDropPoster(navController: NavController, backDropPoster: String) {
                 .fillMaxWidth()
                 .height(50.dp)
                 .align(Alignment.BottomCenter)
-        ) {
-
-        }
-        Image(
-            painter = backArrow,
-            contentDescription = "Back Button",
-            modifier = Modifier
-                .padding(start = 10.dp, top = 10.dp)
-                .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
-                .clip(shape = RoundedCornerShape(10.dp))
-                .background(color = MaterialTheme.colors.background)
-                .size(30.dp)
-                .padding(5.dp)
-                .clickable {
-                    navController.navigateUp()
-                }
         )
+        Row(modifier = Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
+            Image(
+                painter = backArrow,
+                contentDescription = "Back Button",
+                modifier = Modifier
+                    .padding(start = 10.dp, top = 10.dp)
+                    .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
+                    .clip(shape = RoundedCornerShape(10.dp))
+                    .background(color = MaterialTheme.colors.background)
+                    .size(30.dp)
+                    .padding(5.dp)
+                    .clickable {
+                        navController.navigateUp()
+                    }
+            )
+            Image(
+                painter = likeButton,
+                contentDescription = "Like Button",
+                modifier = Modifier
+                    .padding(end = 10.dp, top = 10.dp)
+                    .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
+                    .clip(shape = RoundedCornerShape(10.dp))
+                    .background(color = MaterialTheme.colors.background)
+                    .size(30.dp)
+                    .padding(5.dp)
+                    .clickable {
+//                    navController.navigateUp()
+                    }
+            )
+        }
     }
 }
 
@@ -253,6 +273,60 @@ fun PosterImage(posterPath: String) {
                 .background(color = MaterialTheme.colors.background),
             contentScale = ContentScale.FillWidth
         )
+    }
+}
+
+@Composable
+fun CastList(castList: List<Cast>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 10.dp)
+    ) {
+        Text(
+            text = "Cast",
+            style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp),
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
+        LazyRow {
+            items(castList.size) {
+                val painter =
+                    rememberImagePainter(
+                        data = MovieDBApi.getProfileImage(castList[it].profile_path)
+                    )
+                Column(
+                    modifier = Modifier
+                        .padding(end = 10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        painter = painter,
+                        contentDescription = "Youtube Thumbnail",
+                        modifier = Modifier
+                            .width(120.dp)
+                            .height(120.dp)
+                            .shadow(elevation = 5.dp, shape = RoundedCornerShape(120.dp))
+                            .clip(shape = RoundedCornerShape(120.dp))
+                            .background(color = MaterialTheme.colors.background),
+                        contentScale = ContentScale.Crop
+                    )
+                    val characterList = castList[it].character.split("/")
+                    val characterName = if (characterList.size > 1) {
+                        characterList[1]
+                    } else {
+                        characterList[0]
+                    }
+                    Text(
+                        text = castList[it].name,
+                        style = TextStyle(color = Color.White, fontSize = 15.sp)
+                    )
+                    Text(
+                        text = characterName,
+                        style = TextStyle(color = Color.White, fontSize = 14.sp)
+                    )
+                }
+            }
+        }
     }
 }
 

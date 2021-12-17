@@ -40,7 +40,7 @@ fun GenreMovieDetail(
 ) {
 
     val movieList by rememberSaveable {
-        viewModel.getMovies(genreId = genreId)
+        viewModel.getPaginatedMovies(genreId = genreId)
     }
 
     val isLoading by remember {
@@ -62,7 +62,7 @@ fun GenreMovieDetail(
     ) {
         if (errorMessage.isNotEmpty()) {
             RetrySection(error = errorMessage) {
-                viewModel.getMovies(genreId = genreId)
+                viewModel.getPaginatedMovies(genreId = genreId)
             }
         }
         if (errorMessage.isEmpty()) {
@@ -80,7 +80,7 @@ fun GenreMovieDetail(
                 }
                 items(movieList.size) {
                     if (it >= movieList.size - 1 && !endReached && !isLoading) {
-                        viewModel.getMovies(genreId)
+                        viewModel.getPaginatedMovies(genreId)
                     }
                     MovieList(
                         mainNavController = mainNavController,
