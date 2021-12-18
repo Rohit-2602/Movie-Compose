@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.moviecompose.model.Movie
+import com.example.moviecompose.model.entities.Movie
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.util.Routes
 

@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.moviecompose.model.entities.Movie
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.*
 
@@ -28,6 +30,10 @@ fun MovieDetailScreen(
     movieId: Int,
     viewModel: MovieViewModel = hiltViewModel()
 ) {
+
+    var isFavMovie by remember {
+        viewModel.isFavourite(movieId = movieId)
+    }
 
     val movieDetails by remember {
         viewModel.getMovieDetails(movieId = movieId)
@@ -77,12 +83,36 @@ fun MovieDetailScreen(
                     BackDropPoster(
                         backDropPoster = MovieDBApi.getBackDropPath(movieDetails!!.backdrop_path),
                         navController = navController,
-                        isFavourite = false
-                    )
+                        isFavourite = isFavMovie
+                    ) {
+                        val genreIds = movieDetails!!.genres.map { genre ->
+                            genre.id
+                        }
+                        val movie = Movie(
+                            id = movieDetails!!.id,
+                            title = movieDetails!!.title,
+                            original_title = movieDetails!!.original_title,
+                            overview = movieDetails!!.overview,
+                            backdrop_path = movieDetails!!.backdrop_path,
+                            poster_path = movieDetails!!.poster_path,
+                            genre_ids = genreIds,
+                            vote_average = movieDetails!!.vote_average,
+                            trailers = trailerList,
+                            cast = castList,
+                            recommendation = movieRecommendation
+                        )
+                        if (isFavMovie) {
+                            viewModel.removeMovieFromFavourite(movie = movie)
+                            isFavMovie = false
+                        } else {
+                            viewModel.addMovieToFavourite(movie = movie)
+                            isFavMovie = true
+                        }
+                    }
                     Row {
                         GenreRatingDetail(
                             genre = movieDetails!!.genres[0].name,
-                            voteAverage = movieDetails!!.vote_average.toString()
+                            voteAverage = movieDetails!!.vote_average
                         )
                         MovieRunTime(runTime = movieDetails!!.runtime)
                     }

@@ -1,6 +1,6 @@
 package com.example.moviecompose.util
 
-import com.example.moviecompose.model.Genre
+import com.example.moviecompose.model.network.Genre
 
 object Constant {
 

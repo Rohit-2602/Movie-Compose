@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
-import com.example.moviecompose.model.Episode
+import com.example.moviecompose.model.network.Episode
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.RetrySection
 

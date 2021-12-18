@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.moviecompose.model.Series
+import com.example.moviecompose.model.entities.Series
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.GenreRating
 import com.example.moviecompose.ui.PosterImage
@@ -125,7 +125,7 @@ fun SeriesList(
         PosterImage(posterPath = posterPath)
         Column(modifier = Modifier.height(150.dp)) {
             TitleDescription(title = series.name, description = series.overview)
-            GenreRating(genre = genres[0], voteAverage = series.vote_average.toString())
+            GenreRating(genre = genres[0], voteAverage = series.vote_average)
         }
     }
 }

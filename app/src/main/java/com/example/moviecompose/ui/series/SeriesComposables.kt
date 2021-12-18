@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.moviecompose.model.Season
-import com.example.moviecompose.model.Series
+import com.example.moviecompose.model.entities.Series
+import com.example.moviecompose.model.network.Season
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.util.Routes
 

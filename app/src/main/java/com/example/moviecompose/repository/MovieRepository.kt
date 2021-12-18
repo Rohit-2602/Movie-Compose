@@ -1,14 +1,24 @@
 package com.example.moviecompose.repository
 
-import com.example.moviecompose.model.CastResponse
-import com.example.moviecompose.model.MovieDetailResponse
-import com.example.moviecompose.model.MovieResponse
-import com.example.moviecompose.model.VideoResponse
+import com.example.moviecompose.model.entities.Movie
+import com.example.moviecompose.model.network.CastResponse
+import com.example.moviecompose.model.network.MovieDetailResponse
+import com.example.moviecompose.model.network.MovieResponse
+import com.example.moviecompose.model.network.VideoResponse
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.network.service.MovieService
+import com.example.moviecompose.persistance.MovieDao
 import javax.inject.Inject
 
-class MovieRepository @Inject constructor(private val movieService: MovieService) {
+class MovieRepository @Inject constructor(
+    private val movieService: MovieService,
+    private val movieDao: MovieDao
+) {
+
+    suspend fun addMovieToFavourite(movie: Movie) = movieDao.insertMovie(movie = movie)
+    suspend fun removeMovieFromFavourite(movie: Movie) = movieDao.removeMovie(movie = movie)
+    suspend fun getFavouriteMovie(movieId: Int) = movieDao.getMovie(id = movieId)
+    suspend fun getFavouriteMovieList() = movieDao.getMovieList()
 
     suspend fun getTrendingMovies(page: Int = 1): Resource<MovieResponse> {
         val result = try {

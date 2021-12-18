@@ -4,7 +4,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviecompose.model.*
+import com.example.moviecompose.model.entities.Series
+import com.example.moviecompose.model.network.Cast
+import com.example.moviecompose.model.network.SeasonResponse
+import com.example.moviecompose.model.network.SeriesDetailResponse
+import com.example.moviecompose.model.network.Video
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,6 +23,34 @@ class SeriesViewModel @Inject constructor(private val seriesRepository: SeriesRe
     var isLoading = mutableStateOf(false)
     val endReached = mutableStateOf(false)
     private var currentPage = 1
+
+    fun addSeriesToFavourite(series: Series) {
+        viewModelScope.launch {
+            seriesRepository.addSeriesToFavourite(series = series)
+        }
+    }
+
+    fun removeSeriesFromFavourite(series: Series) {
+        viewModelScope.launch {
+            seriesRepository.removeSeriesFromFavourite(series = series)
+        }
+    }
+
+    fun getFavouriteSeries(seriesId: Int): MutableState<Series?> {
+        val series = mutableStateOf<Series?>(null)
+        viewModelScope.launch {
+            series.value = seriesRepository.getFavouriteSeries(seriesId = seriesId)
+        }
+        return series
+    }
+
+    fun isFavourite(seriesId: Int): MutableState<Boolean> {
+        val fav = mutableStateOf(false)
+        viewModelScope.launch {
+            fav.value = seriesRepository.getFavouriteSeriesList().any { series ->  series.id == seriesId }
+        }
+        return fav
+    }
 
     fun getTrendingSeries(): MutableState<List<Series>> {
         isLoading.value = true

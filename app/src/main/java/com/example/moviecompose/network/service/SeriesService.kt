@@ -1,6 +1,6 @@
 package com.example.moviecompose.network.service
 
-import com.example.moviecompose.model.*
+import com.example.moviecompose.model.network.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

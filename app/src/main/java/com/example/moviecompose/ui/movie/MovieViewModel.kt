@@ -4,10 +4,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviecompose.model.Cast
-import com.example.moviecompose.model.Movie
-import com.example.moviecompose.model.MovieDetailResponse
-import com.example.moviecompose.model.Video
+import com.example.moviecompose.model.entities.Movie
+import com.example.moviecompose.model.network.Cast
+import com.example.moviecompose.model.network.MovieDetailResponse
+import com.example.moviecompose.model.network.Video
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +22,34 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
     var isLoading = mutableStateOf(false)
     val endReached = mutableStateOf(false)
     private var currentPage = 1
+
+    fun addMovieToFavourite(movie: Movie) {
+        viewModelScope.launch {
+            movieRepository.addMovieToFavourite(movie)
+        }
+    }
+
+    fun removeMovieFromFavourite(movie: Movie) {
+        viewModelScope.launch {
+            movieRepository.removeMovieFromFavourite(movie)
+        }
+    }
+
+    fun getFavouriteMovie(movieId: Int): MutableState<Movie?> {
+        val movie = mutableStateOf<Movie?>(null)
+        viewModelScope.launch {
+            movie.value = movieRepository.getFavouriteMovie(movieId)
+        }
+        return movie
+    }
+
+    fun isFavourite(movieId: Int): MutableState<Boolean> {
+        val fav = mutableStateOf(false)
+        viewModelScope.launch {
+            fav.value = movieRepository.getFavouriteMovieList().any { movie ->  movie.id == movieId }
+        }
+        return fav
+    }
 
     fun getTrendingMovies(): MutableState<List<Movie>> {
         val trendingMovies = mutableStateOf<List<Movie>>(listOf())
@@ -79,7 +107,7 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
             } else {
                 movieRepository.getMoviesBasedOnGenre(genreId, page = currentPage)
             }
-            when(result) {
+            when (result) {
                 is Resource.Success -> {
                     endReached.value = currentPage >= result.data!!.total_pages
                     val movies = result.data.results
@@ -107,7 +135,7 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
         isLoading.value = true
         val movieDetail = mutableStateOf<MovieDetailResponse?>(null)
         viewModelScope.launch {
-            when(val result = movieRepository.getMovieDetails(movieId = movieId)) {
+            when (val result = movieRepository.getMovieDetails(movieId = movieId)) {
                 is Resource.Success -> {
                     isLoading.value = false
                     loadError.value = ""
@@ -129,7 +157,7 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
         isLoading.value = true
         val movieCast = mutableStateOf<List<Cast>>(listOf())
         viewModelScope.launch {
-            when(val result = movieRepository.getMovieCast(movieId = movieId)) {
+            when (val result = movieRepository.getMovieCast(movieId = movieId)) {
                 is Resource.Success -> {
                     isLoading.value = false
                     loadError.value = ""
@@ -153,7 +181,7 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
         isLoading.value = true
         val recommendation = mutableStateOf<List<Movie>>(listOf())
         viewModelScope.launch {
-            when(val result = movieRepository.getMovieRecommendation(movieId = movieId)) {
+            when (val result = movieRepository.getMovieRecommendation(movieId = movieId)) {
                 is Resource.Success -> {
                     isLoading.value = false
                     loadError.value = ""
@@ -175,7 +203,7 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
         isLoading.value = true
         val trailers = mutableStateOf<List<Video>>(listOf())
         viewModelScope.launch {
-            when(val result = movieRepository.getMovieVideos(movieId = movieId)) {
+            when (val result = movieRepository.getMovieVideos(movieId = movieId)) {
                 is Resource.Success -> {
                     trailers.value = result.data!!.results
                         .filter { video ->

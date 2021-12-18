@@ -1,4 +1,4 @@
-package com.example.moviecompose.model
+package com.example.moviecompose.model.network
 
 data class Genre(
     val id: Int,

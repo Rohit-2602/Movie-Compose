@@ -1,9 +1,9 @@
 package com.example.moviecompose.network.service
 
-import com.example.moviecompose.model.CastResponse
-import com.example.moviecompose.model.MovieDetailResponse
-import com.example.moviecompose.model.MovieResponse
-import com.example.moviecompose.model.VideoResponse
+import com.example.moviecompose.model.network.CastResponse
+import com.example.moviecompose.model.network.MovieDetailResponse
+import com.example.moviecompose.model.network.MovieResponse
+import com.example.moviecompose.model.network.VideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

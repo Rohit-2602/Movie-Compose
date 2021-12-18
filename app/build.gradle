@@ -77,14 +77,21 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
-    // Coroutines
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    // architecture components
+    implementation "androidx.fragment:fragment-ktx:$fragmentVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    testImplementation "androidx.arch.core:core-testing:$archCompomentVersion"
 
-    // Coroutine Lifecycle Scopes
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-//    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
-//    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
+    // coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 
     // Coil
     implementation "io.coil-kt:coil-compose:1.4.0"

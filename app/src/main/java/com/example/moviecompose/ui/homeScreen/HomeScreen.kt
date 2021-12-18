@@ -19,8 +19,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.moviecompose.ui.homeScreen.myListScreen.MyListScreen
 import com.example.moviecompose.ui.movie.MovieScreen
+import com.example.moviecompose.ui.myList.MyListScreen
 import com.example.moviecompose.ui.series.SeriesScreen
 import com.example.moviecompose.util.Routes.MOVIE_SCREEN
 import com.example.moviecompose.util.Routes.MY_LIST_SCREEN
@@ -75,7 +75,7 @@ fun HomeScreen(
                     selectedTab = 1
                 }
                 composable(MY_LIST_SCREEN) {
-                    MyListScreen(navController = mainNavController)
+                    MyListScreen(mainNavController = mainNavController)
                     selectedTab = 2
                 }
             }

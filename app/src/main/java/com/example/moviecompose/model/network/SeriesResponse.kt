@@ -1,4 +1,6 @@
-package com.example.moviecompose.model
+package com.example.moviecompose.model.network
+
+import com.example.moviecompose.model.entities.Series
 
 data class SeriesResponse(
     val page: Int,

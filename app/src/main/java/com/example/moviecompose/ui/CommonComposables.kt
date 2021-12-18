@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.moviecompose.R
-import com.example.moviecompose.model.Cast
-import com.example.moviecompose.model.Video
+import com.example.moviecompose.model.network.Cast
+import com.example.moviecompose.model.network.Video
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.util.Routes
 
@@ -84,7 +84,12 @@ fun MoviesSeriesHeader(
 }
 
 @Composable
-fun BackDropPoster(navController: NavController, backDropPoster: String, isFavourite: Boolean) {
+fun BackDropPoster(
+    navController: NavController,
+    backDropPoster: String,
+    isFavourite: Boolean,
+    onFavClick: () -> Unit
+) {
     val backArrow = rememberImagePainter(R.drawable.ic_back)
     val likeButton = if (isFavourite) {
         rememberImagePainter(R.drawable.ic_favorite)
@@ -142,7 +147,7 @@ fun BackDropPoster(navController: NavController, backDropPoster: String, isFavou
                     .size(30.dp)
                     .padding(5.dp)
                     .clickable {
-//                    navController.navigateUp()
+                        onFavClick()
                     }
             )
         }

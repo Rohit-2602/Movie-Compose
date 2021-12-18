@@ -1,11 +1,21 @@
 package com.example.moviecompose.repository
 
-import com.example.moviecompose.model.*
+import com.example.moviecompose.model.entities.Series
+import com.example.moviecompose.model.network.*
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.network.service.SeriesService
+import com.example.moviecompose.persistance.SeriesDao
 import javax.inject.Inject
 
-class SeriesRepository @Inject constructor(private val seriesService: SeriesService) {
+class SeriesRepository @Inject constructor(
+    private val seriesService: SeriesService,
+    private val seriesDao: SeriesDao
+) {
+
+    suspend fun addSeriesToFavourite(series: Series) = seriesDao.insertSeries(series = series)
+    suspend fun removeSeriesFromFavourite(series: Series) = seriesDao.removeSeries(series = series)
+    suspend fun getFavouriteSeries(seriesId: Int) = seriesDao.getSeries(id = seriesId)
+    suspend fun getFavouriteSeriesList() = seriesDao.getSeriesList()
 
     suspend fun getTrendingSeries(page: Int = 1): Resource<SeriesResponse> {
         val result = try {
