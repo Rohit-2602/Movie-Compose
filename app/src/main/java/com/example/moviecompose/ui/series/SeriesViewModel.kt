@@ -53,7 +53,6 @@ class SeriesViewModel @Inject constructor(private val seriesRepository: SeriesRe
     }
 
     fun getTrendingSeries(): MutableState<List<Series>> {
-        isLoading.value = true
         val trendingSeries = mutableStateOf<List<Series>>(listOf())
         viewModelScope.launch {
             when (val result = seriesRepository.getTrendingSeries()) {

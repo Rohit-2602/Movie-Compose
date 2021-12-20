@@ -112,10 +112,12 @@ fun SeriesDetailScreen(
                             isFavSeries = true
                         }
                     }
-                    GenreRatingDetail(
-                        genre = seriesDetail!!.genres[0].name,
-                        voteAverage = seriesDetail!!.vote_average
-                    )
+                    if (!seriesDetail!!.genres.isNullOrEmpty()) {
+                        GenreRatingDetail(
+                            genre = seriesDetail!!.genres[0].name,
+                            voteAverage = seriesDetail!!.vote_average
+                        )
+                    }
                     TitleDescriptionDetail(
                         title = seriesDetail!!.name,
                         description = seriesDetail!!.overview

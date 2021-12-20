@@ -53,7 +53,6 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
 
     fun getTrendingMovies(): MutableState<List<Movie>> {
         val trendingMovies = mutableStateOf<List<Movie>>(listOf())
-        isLoading.value = true
         viewModelScope.launch {
             when (val result = movieRepository.getTrendingMovies()) {
                 is Resource.Success -> {
@@ -132,7 +131,7 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
     }
 
     fun getMovieDetails(movieId: Int): MutableState<MovieDetailResponse?> {
-        isLoading.value = true
+//        isLoading.value = true
         val movieDetail = mutableStateOf<MovieDetailResponse?>(null)
         viewModelScope.launch {
             when (val result = movieRepository.getMovieDetails(movieId = movieId)) {

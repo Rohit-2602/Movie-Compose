@@ -11,12 +11,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.moviecompose.model.entities.Series
 import com.example.moviecompose.ui.MoviesSeriesHeader
 import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.util.Constant
@@ -27,11 +27,7 @@ fun SeriesScreen(
     viewModel: SeriesViewModel = hiltViewModel()
 ) {
 
-    val trendingSeries by remember {
-        viewModel.getTrendingSeries()
-    }
-
-    val isLoading by remember {
+    var isLoading by remember {
         viewModel.isLoading
     }
 
@@ -46,6 +42,7 @@ fun SeriesScreen(
     ) {
         if (errorMessage.isNotEmpty()) {
             RetrySection(error = errorMessage) {
+                isLoading = true
                 viewModel.getTrendingSeries()
             }
         }
@@ -58,8 +55,7 @@ fun SeriesScreen(
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
                     TrendingSeriesList(
-                        navController = navController,
-                        trendingSeries = trendingSeries
+                        navController = navController
                     )
                 }
                 item {
@@ -79,8 +75,11 @@ fun SeriesScreen(
 @Composable
 fun TrendingSeriesList(
     navController: NavController,
-    trendingSeries: List<Series>
+    viewModel: SeriesViewModel = hiltViewModel()
 ) {
+    val trendingSeries by remember {
+        viewModel.getTrendingSeries()
+    }
     Column {
         MoviesSeriesHeader(
             navController = navController,

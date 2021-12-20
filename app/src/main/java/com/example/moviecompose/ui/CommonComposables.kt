@@ -187,7 +187,7 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
         modifier = Modifier
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(color = MaterialTheme.colors.surface)
+            .background(MaterialTheme.colors.background)
             .padding(5.dp)
     )
 
@@ -197,7 +197,7 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
             .offset(x = 10.dp)
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(color = MaterialTheme.colors.surface)
+            .background(MaterialTheme.colors.background)
             .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
