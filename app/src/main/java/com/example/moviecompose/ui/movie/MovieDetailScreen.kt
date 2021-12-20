@@ -124,20 +124,22 @@ fun MovieDetailScreen(
                         Trailers(trailers = trailerList)
                     }
                     CastList(castList = castList)
-                    Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
-                        Text(
-                            text = "Recommendations",
-                            style = TextStyle(
-                                color = Color.White,
-                                fontSize = 20.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
-                        MovieRowList(
-                            mainNavController = navController,
-                            movieList = movieRecommendation
-                        )
+                    if (movieRecommendation.isNotEmpty()) {
+                        Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
+                            Text(
+                                text = "Recommendations",
+                                style = TextStyle(
+                                    color = Color.White,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                            MovieRowList(
+                                navController = navController,
+                                movieList = movieRecommendation
+                            )
+                        }
                     }
                 }
             }

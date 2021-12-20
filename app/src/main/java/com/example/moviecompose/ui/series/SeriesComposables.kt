@@ -3,10 +3,7 @@ package com.example.moviecompose.ui.series
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -27,39 +24,36 @@ import coil.compose.rememberImagePainter
 import com.example.moviecompose.model.entities.Series
 import com.example.moviecompose.model.network.Season
 import com.example.moviecompose.network.MovieDBApi
-import com.example.moviecompose.util.Routes
+import com.example.moviecompose.ui.navigation.NavScreen
 
 @Composable
 fun SeriesImage(
-    mainNavController: NavController,
+    navController: NavController,
     series: Series
 ) {
     val painter = rememberImagePainter(
         data = MovieDBApi.getPosterPath(series.poster_path)
     )
-    Column(
+    Image(
+        painter = painter,
+        contentDescription = "Series Image",
         modifier = Modifier
             .width(150.dp)
+            .height(200.dp)
             .padding(start = 10.dp)
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
-    ) {
-        Image(
-            painter = painter,
-            contentDescription = "Series Image",
-            modifier = Modifier
-                .size(200.dp)
-                .clickable {
-                    mainNavController.navigate("${Routes.SERIES_DETAIL_SCREEN}/${series.id}")
-                },
-            contentScale = ContentScale.FillWidth
-        )
-    }
+            .background(color = MaterialTheme.colors.background)
+            .clickable {
+                navController.navigate("${NavScreen.SeriesDetail.route}/${series.id}")
+            },
+        contentScale = ContentScale.FillWidth
+    )
 }
 
 @Composable
 fun SeriesRowList(
-    mainNavController: NavController,
+    navController: NavController,
     seriesList: List<Series>,
 ) {
     LazyRow(modifier = Modifier.padding(end = 10.dp, top = 10.dp)) {
@@ -70,7 +64,7 @@ fun SeriesRowList(
         }
         items(itemCount) {
             SeriesImage(
-                mainNavController = mainNavController,
+                navController = navController,
                 series = seriesList[it]
             )
         }
@@ -78,7 +72,12 @@ fun SeriesRowList(
 }
 
 @Composable
-fun SeasonsList(seriesName: String, seriesId: Int, seasons: List<Season>, navController: NavController) {
+fun SeasonsList(
+    seriesName: String,
+    seriesId: Int,
+    seasons: List<Season>,
+    navController: NavController
+) {
     Text(
         text = "Seasons",
         style = TextStyle(color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold),
@@ -97,7 +96,7 @@ fun SeasonsList(seriesName: String, seriesId: Int, seasons: List<Season>, navCon
                     .clip(shape = RoundedCornerShape(10.dp))
                     .background(MaterialTheme.colors.background)
                     .clickable {
-                        navController.navigate("${Routes.SEASON_DETAIL_SCREEN}/${seriesId}/${seasons[it].season_number}/${seriesName}")
+                        navController.navigate("${NavScreen.SeasonDetail.route}/${seriesId}/${seasons[it].season_number}/${seriesName}")
                     },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

@@ -23,7 +23,7 @@ import com.example.moviecompose.ui.series.SeriesList
 
 @Composable
 fun MyListScreen(
-    mainNavController: NavController,
+    navController: NavController,
     viewModel: MyListViewModel = hiltViewModel()
 ) {
 
@@ -55,7 +55,7 @@ fun MyListScreen(
                 }
                 items(movieList.size) {
                     MovieList(
-                        mainNavController = mainNavController,
+                        navController = navController,
                         index = it,
                         movieList = movieList,
                         genreIdList = movieList[it].genre_ids
@@ -76,7 +76,7 @@ fun MyListScreen(
                 }
                 items(seriesList.size) {
                     SeriesList(
-                        mainNavController = mainNavController,
+                        navController = navController,
                         index = it,
                         seriesList = seriesList,
                         genreIdList = seriesList[it].genre_ids

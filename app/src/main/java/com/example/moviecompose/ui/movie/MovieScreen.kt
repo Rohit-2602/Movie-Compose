@@ -2,7 +2,6 @@ package com.example.moviecompose.ui.movie
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,11 +22,11 @@ import com.example.moviecompose.util.Constant
 
 @Composable
 fun MovieScreen(
-    mainNavController: NavController,
+    navController: NavController,
     viewModel: MovieViewModel = hiltViewModel()
 ) {
 
-    val trendingMovies by rememberSaveable {
+    val trendingMovies by remember {
         viewModel.getTrendingMovies()
     }
 
@@ -59,14 +57,14 @@ fun MovieScreen(
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
                     TrendingMovieList(
-                        mainNavController = mainNavController,
+                        navController = navController,
                         trendingMovies = trendingMovies
                     )
                 }
                 item {
                     for (genre in Constant.MOVIES_GENRE_LIST) {
                         GenreMovieList(
-                            mainNavController = mainNavController,
+                            navController = navController,
                             title = genre.name, genreId = genre.id
                         )
                     }
@@ -78,39 +76,35 @@ fun MovieScreen(
 
 @Composable
 fun TrendingMovieList(
-    mainNavController: NavController,
+    navController: NavController,
     trendingMovies: List<Movie>
 ) {
-    Column {
-        MoviesSeriesHeader(
-            mainNavController = mainNavController,
-            title = "Trending", isMovie = true, genreId = 0
-        )
-        MovieRowList(
-            mainNavController = mainNavController,
-            movieList = trendingMovies
-        )
-    }
+    MoviesSeriesHeader(
+        navController = navController,
+        title = "Trending", isMovie = true, genreId = 0
+    )
+    MovieRowList(
+        navController = navController,
+        movieList = trendingMovies
+    )
 }
 
 @Composable
 fun GenreMovieList(
-    mainNavController: NavController,
+    navController: NavController,
     title: String,
     genreId: Int,
     viewModel: MovieViewModel = hiltViewModel(),
 ) {
-    val genreMovies by rememberSaveable {
+    val genreMovies by remember {
         viewModel.getMoviesByGenre(genre = genreId)
     }
-    Column {
-        MoviesSeriesHeader(
-            mainNavController = mainNavController,
-            title = title, isMovie = true, genreId = genreId
-        )
-        MovieRowList(
-            mainNavController = mainNavController,
-            movieList = genreMovies
-        )
-    }
+    MoviesSeriesHeader(
+        navController = navController,
+        title = title, isMovie = true, genreId = genreId
+    )
+    MovieRowList(
+        navController = navController,
+        movieList = genreMovies
+    )
 }

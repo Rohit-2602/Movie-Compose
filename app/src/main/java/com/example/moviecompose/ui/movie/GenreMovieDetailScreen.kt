@@ -28,12 +28,12 @@ import com.example.moviecompose.ui.GenreRating
 import com.example.moviecompose.ui.PosterImage
 import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.ui.TitleDescription
+import com.example.moviecompose.ui.navigation.NavScreen
 import com.example.moviecompose.util.Constant
-import com.example.moviecompose.util.Routes
 
 @Composable
 fun GenreMovieDetail(
-    mainNavController: NavController,
+    navController: NavController,
     genreId: Int,
     genreTitle: String,
     viewModel: MovieViewModel = hiltViewModel()
@@ -83,7 +83,7 @@ fun GenreMovieDetail(
                         viewModel.getPaginatedMovies(genreId)
                     }
                     MovieList(
-                        mainNavController = mainNavController,
+                        navController = navController,
                         index = it,
                         movieList = movieList,
                         genreIdList = movieList[it].genre_ids
@@ -96,7 +96,7 @@ fun GenreMovieDetail(
 
 @Composable
 fun MovieList(
-    mainNavController: NavController,
+    navController: NavController,
     index: Int,
     movieList: List<Movie>,
     genreIdList: List<Int>
@@ -117,11 +117,11 @@ fun MovieList(
             .clip(shape = RoundedCornerShape(10.dp))
             .background(color = MaterialTheme.colors.background)
             .clickable {
-                mainNavController.navigate("${Routes.MOVIE_DETAIL_SCREEN}/${movie.id}")
+                navController.navigate("${NavScreen.MovieDetail.route}/${movie.id}")
             }
     ) {
         PosterImage(posterPath = posterPath)
-        Column(modifier = Modifier.height(150.dp)) {
+        Column(modifier = Modifier.height(150.dp).padding(start = 10.dp)) {
             TitleDescription(title = movie.title, description = movie.overview)
             GenreRating(genre = genres[0], voteAverage = movie.vote_average)
         }

@@ -131,7 +131,7 @@ fun SeriesDetailScreen(
                             style = TextStyle(color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold),
                             modifier = Modifier.padding(start = 10.dp)
                         )
-                        SeriesRowList(mainNavController = navController, seriesList = seriesRecommendation)
+                        SeriesRowList(navController = navController, seriesList = seriesRecommendation)
                     }
                 }
             }

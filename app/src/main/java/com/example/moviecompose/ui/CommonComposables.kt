@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,7 +30,7 @@ import com.example.moviecompose.R
 import com.example.moviecompose.model.network.Cast
 import com.example.moviecompose.model.network.Video
 import com.example.moviecompose.network.MovieDBApi
-import com.example.moviecompose.util.Routes
+import com.example.moviecompose.ui.navigation.NavScreen
 
 @Composable
 fun RetrySection(error: String, onRetry: () -> Unit) {
@@ -47,7 +48,7 @@ fun RetrySection(error: String, onRetry: () -> Unit) {
 
 @Composable
 fun MoviesSeriesHeader(
-    mainNavController: NavController,
+    navController: NavController,
     title: String,
     isMovie: Boolean,
     genreId: Int
@@ -74,9 +75,9 @@ fun MoviesSeriesHeader(
                 .padding(start = 20.dp, end = 20.dp, top = 10.dp)
                 .clickable {
                     if (isMovie) {
-                        mainNavController.navigate("${Routes.GENRE_MOVIE_SCREEN}/${genreId}/${title}")
+                        navController.navigate("${NavScreen.GenreMovieDetail.route}/${genreId}/${title}")
                     } else {
-                        mainNavController.navigate("${Routes.GENRE_SERIES_SCREEN}/${genreId}/${title}")
+                        navController.navigate("${NavScreen.GenreSeriesDetail.route}/${genreId}/${title}")
                     }
                 }
         )
@@ -166,7 +167,7 @@ fun GenreRatingDetail(genre: String, voteAverage: String) {
 fun GenreRating(genre: String, voteAverage: String) {
     Row(
         Modifier
-            .padding(start = 10.dp, bottom = 3.dp)
+            .padding(bottom = 3.dp)
             .fillMaxHeight(),
         verticalAlignment = Alignment.Bottom
     ) {
@@ -186,7 +187,7 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
         modifier = Modifier
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(color = MaterialTheme.colors.background)
+            .background(color = MaterialTheme.colors.surface)
             .padding(5.dp)
     )
 
@@ -196,13 +197,12 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
             .offset(x = 10.dp)
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(color = MaterialTheme.colors.background)
+            .background(color = MaterialTheme.colors.surface)
             .padding(5.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        val ratingStar = rememberImagePainter(data = R.drawable.ic_star)
         Image(
-            painter = ratingStar,
+            painter = painterResource(id = R.drawable.ic_star),
             modifier = Modifier
                 .width(18.dp)
                 .height(18.dp),
@@ -243,22 +243,21 @@ fun TitleDescriptionDetail(
 }
 
 @Composable
-fun TitleDescription(title: String, description: String) {
-    Column(modifier = Modifier.padding(start = 10.dp, top = 5.dp)) {
-        Text(
-            text = title,
-            style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            text = description,
-            style = TextStyle(color = Color.White, fontSize = 16.sp),
-            modifier = Modifier.padding(top = 5.dp),
-            maxLines = 4,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
+fun TitleDescription(title: String, description: String, modifier: Modifier = Modifier) {
+    Text(
+        text = title,
+        style = TextStyle(color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = modifier.padding(top = 5.dp)
+    )
+    Text(
+        text = description,
+        style = TextStyle(color = Color.White, fontSize = 16.sp),
+        modifier = modifier.padding(top = 5.dp),
+        maxLines = 4,
+        overflow = TextOverflow.Ellipsis
+    )
 }
 
 @Composable

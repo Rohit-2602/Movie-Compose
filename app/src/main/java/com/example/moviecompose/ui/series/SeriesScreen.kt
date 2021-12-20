@@ -11,7 +11,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,11 +23,11 @@ import com.example.moviecompose.util.Constant
 
 @Composable
 fun SeriesScreen(
-    mainNavController: NavController,
+    navController: NavController,
     viewModel: SeriesViewModel = hiltViewModel()
 ) {
 
-    val trendingSeries by rememberSaveable {
+    val trendingSeries by remember {
         viewModel.getTrendingSeries()
     }
 
@@ -59,14 +58,14 @@ fun SeriesScreen(
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
                     TrendingSeriesList(
-                        mainNavController = mainNavController,
+                        navController = navController,
                         trendingSeries = trendingSeries
                     )
                 }
                 item {
                     for (genre in Constant.SERIES_GENRE_LIST) {
                         GenreSeriesList(
-                            mainNavController = mainNavController,
+                            navController = navController,
                             title = genre.name,
                             genreId = genre.id
                         )
@@ -79,18 +78,18 @@ fun SeriesScreen(
 
 @Composable
 fun TrendingSeriesList(
-    mainNavController: NavController,
+    navController: NavController,
     trendingSeries: List<Series>
 ) {
     Column {
         MoviesSeriesHeader(
-            mainNavController = mainNavController,
+            navController = navController,
             title = "Trending",
             isMovie = false,
             genreId = 0
         )
         SeriesRowList(
-            mainNavController = mainNavController,
+            navController = navController,
             seriesList = trendingSeries
         )
     }
@@ -98,23 +97,23 @@ fun TrendingSeriesList(
 
 @Composable
 fun GenreSeriesList(
-    mainNavController: NavController,
+    navController: NavController,
     title: String,
     genreId: Int,
     viewModel: SeriesViewModel = hiltViewModel(),
 ) {
-    val genreSeries by rememberSaveable {
+    val genreSeries by remember {
         viewModel.getSeriesByGenre(genre = genreId)
     }
     Column {
         MoviesSeriesHeader(
-            mainNavController = mainNavController,
+            navController = navController,
             title = title,
             isMovie = false,
             genreId = genreId
         )
         SeriesRowList(
-            mainNavController = mainNavController,
+            navController = navController,
             seriesList = genreSeries
         )
     }

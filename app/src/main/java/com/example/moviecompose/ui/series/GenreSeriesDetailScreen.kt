@@ -28,12 +28,12 @@ import com.example.moviecompose.ui.GenreRating
 import com.example.moviecompose.ui.PosterImage
 import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.ui.TitleDescription
+import com.example.moviecompose.ui.navigation.NavScreen
 import com.example.moviecompose.util.Constant
-import com.example.moviecompose.util.Routes
 
 @Composable
 fun GenreSeriesDetail(
-    mainNavController: NavController,
+    navController: NavController,
     genreId: Int,
     genreTitle: String,
     viewModel: SeriesViewModel = hiltViewModel()
@@ -83,7 +83,7 @@ fun GenreSeriesDetail(
                         viewModel.getPaginatedSeries(genreId)
                     }
                     SeriesList(
-                        mainNavController = mainNavController,
+                        navController = navController,
                         index = it,
                         seriesList = seriesList,
                         genreIdList = seriesList[it].genre_ids
@@ -96,7 +96,7 @@ fun GenreSeriesDetail(
 
 @Composable
 fun SeriesList(
-    mainNavController: NavController,
+    navController: NavController,
     index: Int,
     seriesList: List<Series>,
     genreIdList: List<Int>
@@ -119,11 +119,11 @@ fun SeriesList(
             .clip(shape = RoundedCornerShape(10.dp))
             .background(color = MaterialTheme.colors.background)
             .clickable {
-                mainNavController.navigate("${Routes.SERIES_DETAIL_SCREEN}/${series.id}")
+                navController.navigate("${NavScreen.SeriesDetail.route}/${series.id}")
             }
     ) {
         PosterImage(posterPath = posterPath)
-        Column(modifier = Modifier.height(150.dp)) {
+        Column(modifier = Modifier.height(150.dp).padding(start = 10.dp)) {
             TitleDescription(title = series.name, description = series.overview)
             GenreRating(genre = genres[0], voteAverage = series.vote_average)
         }
