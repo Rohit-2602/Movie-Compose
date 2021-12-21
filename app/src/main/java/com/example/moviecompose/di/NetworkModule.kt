@@ -3,6 +3,7 @@ package com.example.moviecompose.di
 import com.example.moviecompose.BuildConfig
 import com.example.moviecompose.network.MovieDBApi.BASE_URL
 import com.example.moviecompose.network.service.MovieService
+import com.example.moviecompose.network.service.PeopleService
 import com.example.moviecompose.network.service.SearchService
 import com.example.moviecompose.network.service.SeriesService
 import dagger.Module
@@ -57,5 +58,10 @@ object NetworkModule {
     @Singleton
     fun provideSearchService(retrofit: Retrofit): SearchService =
         retrofit.create(SearchService::class.java)
+
+    @Provides
+    @Singleton
+    fun providePeopleService(retrofit: Retrofit): PeopleService =
+        retrofit.create(PeopleService::class.java)
 
 }

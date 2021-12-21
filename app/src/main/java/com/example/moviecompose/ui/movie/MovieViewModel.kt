@@ -131,7 +131,6 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
     }
 
     fun getMovieDetails(movieId: Int): MutableState<MovieDetailResponse?> {
-//        isLoading.value = true
         val movieDetail = mutableStateOf<MovieDetailResponse?>(null)
         viewModelScope.launch {
             when (val result = movieRepository.getMovieDetails(movieId = movieId)) {

@@ -1,6 +1,5 @@
 package com.example.moviecompose.ui.search
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -63,7 +62,6 @@ fun SearchScreen(
                 hint = "Search...",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
             ) {
                 viewModel.searchQuery.value = it
                 viewModel.search(it)
@@ -83,8 +81,6 @@ fun SearchScreen(
                     items(searchList.size) {
                         if (it >= searchList.size - 1 && !endReached && !isLoading) {
                             viewModel.loadMoreResult(searchQuery)
-                            Log.i("Rohit", searchQuery)
-                            Log.i("Rohit", searchList.size.toString())
                         }
                         SearchListItem(
                             navController = navController,
@@ -154,18 +150,14 @@ fun SearchBar(
     viewModel: SearchViewModel = hiltViewModel(),
     onSearch: (String) -> Unit = {}
 ) {
-//    var text by remember {
-//        mutableStateOf("")
-//    }
     var isHintDisplayed by remember {
         mutableStateOf(hint != "")
     }
 
-    Box(modifier = modifier) {
+    Box(modifier = modifier.padding(10.dp).padding(top = 10.dp)) {
         BasicTextField(
             value = viewModel.searchQuery.value,
             onValueChange = {
-//                viewModel.searchQuery.value = it
                 onSearch(it)
             },
             maxLines = 1,

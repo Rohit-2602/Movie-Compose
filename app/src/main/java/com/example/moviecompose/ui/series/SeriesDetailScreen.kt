@@ -125,15 +125,31 @@ fun SeriesDetailScreen(
                     if (trailerList.isNotEmpty()) {
                         Trailers(trailers = trailerList)
                     }
-                    CastList(castList = castList)
-                    SeasonsList(seriesName = seriesDetail!!.name, seriesId = seriesId, seasons = seriesDetail!!.seasons, navController = navController)
-                    Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
-                        Text(
-                            text = "Recommendations",
-                            style = TextStyle(color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold),
-                            modifier = Modifier.padding(start = 10.dp)
-                        )
-                        SeriesRowList(navController = navController, seriesList = seriesRecommendation)
+                    if (castList.isNotEmpty()) {
+                        CastList(castList = castList)
+                    }
+                    SeasonsList(
+                        seriesName = seriesDetail!!.name,
+                        seriesId = seriesId,
+                        seasons = seriesDetail!!.seasons,
+                        navController = navController
+                    )
+                    if (seriesRecommendation.isNotEmpty()) {
+                        Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
+                            Text(
+                                text = "Recommendations",
+                                style = TextStyle(
+                                    color = Color.White,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.padding(start = 10.dp)
+                            )
+                            SeriesRowList(
+                                navController = navController,
+                                seriesList = seriesRecommendation
+                            )
+                        }
                     }
                 }
             }
