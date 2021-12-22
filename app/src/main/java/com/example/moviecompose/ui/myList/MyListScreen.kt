@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.moviecompose.ui.movie.MovieList
-import com.example.moviecompose.ui.series.SeriesList
+import com.example.moviecompose.ui.movie.genreMovieList.MovieList
+import com.example.moviecompose.ui.series.genreSeriesList.SeriesList
 
 @Composable
 fun MyListScreen(

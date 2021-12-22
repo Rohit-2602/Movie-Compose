@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -52,7 +53,7 @@ fun SearchScreen(
         viewModel.searchQuery
     }
 
-    Box(
+    Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.surface)

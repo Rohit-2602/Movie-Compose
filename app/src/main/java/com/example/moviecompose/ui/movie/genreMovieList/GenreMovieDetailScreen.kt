@@ -1,17 +1,18 @@
-package com.example.moviecompose.ui.movie
+package com.example.moviecompose.ui.movie.genreMovieList
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -36,10 +37,10 @@ fun GenreMovieDetail(
     navController: NavController,
     genreId: Int,
     genreTitle: String,
-    viewModel: MovieViewModel = hiltViewModel()
+    viewModel: GenreMovieDetailViewModel = hiltViewModel()
 ) {
 
-    val movieList by rememberSaveable {
+    val movieList by remember {
         viewModel.getPaginatedMovies(genreId = genreId)
     }
 
@@ -63,6 +64,11 @@ fun GenreMovieDetail(
         if (errorMessage.isNotEmpty()) {
             RetrySection(error = errorMessage) {
                 viewModel.getPaginatedMovies(genreId = genreId)
+            }
+        }
+        if (isLoading && movieList.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
             }
         }
         if (errorMessage.isEmpty()) {
@@ -121,7 +127,9 @@ fun MovieList(
             }
     ) {
         PosterImage(posterPath = posterPath)
-        Column(modifier = Modifier.height(150.dp).padding(start = 10.dp)) {
+        Column(modifier = Modifier
+            .height(150.dp)
+            .padding(start = 10.dp)) {
             TitleDescription(title = movie.title, description = movie.overview)
             GenreRating(genre = genres[0], voteAverage = movie.vote_average)
         }

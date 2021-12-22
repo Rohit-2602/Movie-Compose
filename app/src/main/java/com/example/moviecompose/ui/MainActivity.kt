@@ -3,11 +3,12 @@ package com.example.moviecompose.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.People
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,17 +23,19 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.moviecompose.ui.movie.GenreMovieDetail
-import com.example.moviecompose.ui.movie.MovieDetailScreen
+import com.example.moviecompose.ui.movie.genreMovieList.GenreMovieDetail
+import com.example.moviecompose.ui.movie.movieDetail.MovieDetailScreen
 import com.example.moviecompose.ui.navigation.NavScreen
-import com.example.moviecompose.ui.people.PeopleScreen
+import com.example.moviecompose.ui.person.PersonScreen
+import com.example.moviecompose.ui.person.personDetail.PersonDetailScreen
 import com.example.moviecompose.ui.search.SearchScreen
-import com.example.moviecompose.ui.series.GenreSeriesDetail
-import com.example.moviecompose.ui.series.SeasonDetailScreen
-import com.example.moviecompose.ui.series.SeriesDetailScreen
+import com.example.moviecompose.ui.series.genreSeriesList.GenreSeriesDetail
+import com.example.moviecompose.ui.series.seasonDetail.SeasonDetailScreen
+import com.example.moviecompose.ui.series.seriesDetail.SeriesDetailScreen
 import com.example.moviecompose.ui.theme.ComposeMovieTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalFoundationApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +110,8 @@ class MainActivity : ComponentActivity() {
                             )
                         ) {
                             val genreId = it.arguments?.getInt(NavScreen.GenreMovieDetail.argument0)
-                            val genreTitle = it.arguments?.getString(NavScreen.GenreMovieDetail.argument1)
+                            val genreTitle =
+                                it.arguments?.getString(NavScreen.GenreMovieDetail.argument1)
                             GenreMovieDetail(
                                 navController = navController,
                                 genreId = genreId!!,
@@ -136,8 +140,10 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         ) {
-                            val genreId = it.arguments?.getInt(NavScreen.GenreSeriesDetail.argument0)
-                            val genreTitle = it.arguments?.getString(NavScreen.GenreSeriesDetail.argument1)
+                            val genreId =
+                                it.arguments?.getInt(NavScreen.GenreSeriesDetail.argument0)
+                            val genreTitle =
+                                it.arguments?.getString(NavScreen.GenreSeriesDetail.argument1)
                             GenreSeriesDetail(
                                 navController = navController,
                                 genreId = genreId!!,
@@ -159,8 +165,10 @@ class MainActivity : ComponentActivity() {
                             )
                         ) {
                             val seriesId = it.arguments?.getInt(NavScreen.SeasonDetail.argument0)
-                            val seasonNumber = it.arguments?.getInt(NavScreen.SeasonDetail.argument1)
-                            val seasonName = it.arguments?.getString(NavScreen.SeasonDetail.argument2)
+                            val seasonNumber =
+                                it.arguments?.getInt(NavScreen.SeasonDetail.argument1)
+                            val seasonName =
+                                it.arguments?.getString(NavScreen.SeasonDetail.argument2)
                             SeasonDetailScreen(
                                 seriesId = seriesId!!,
                                 seriesName = seasonName!!,
@@ -170,8 +178,27 @@ class MainActivity : ComponentActivity() {
                         composable(MainBottomNavDestination.Search.route) {
                             SearchScreen(navController = navController)
                         }
-                        composable(MainBottomNavDestination.People.route) {
-                            PeopleScreen()
+                        composable(MainBottomNavDestination.Person.route) {
+                            PersonScreen(navController = navController)
+                        }
+                        composable(
+                            route = NavScreen.PersonDetail.routeWithArgument,
+                            arguments = listOf(
+                                navArgument(NavScreen.PersonDetail.argument0) {
+                                    type = NavType.IntType
+                                },
+                                navArgument(NavScreen.PersonDetail.argument0) {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
+                            val personId = it.arguments?.getInt(NavScreen.PersonDetail.argument0)
+                            val personKnownFor = it.arguments?.getString(NavScreen.PersonDetail.argument1)
+                            PersonDetailScreen(
+                                navController = navController,
+                                personId = personId!!,
+                                personKnownFor = personKnownFor!!
+                            )
                         }
                     }
                 }
@@ -183,7 +210,7 @@ class MainActivity : ComponentActivity() {
 private val bottomNavDestinations = listOf(
     MainBottomNavDestination.Home,
     MainBottomNavDestination.Search,
-    MainBottomNavDestination.People
+    MainBottomNavDestination.Person
 )
 
 sealed class MainBottomNavDestination(
@@ -193,5 +220,5 @@ sealed class MainBottomNavDestination(
 ) {
     object Home : MainBottomNavDestination("home", Icons.Outlined.Home, "Home")
     object Search : MainBottomNavDestination("search", Icons.Outlined.Search, "Search")
-    object People : MainBottomNavDestination("people", Icons.Outlined.People, "People")
+    object Person : MainBottomNavDestination("Person", Icons.Outlined.Person, "Person")
 }

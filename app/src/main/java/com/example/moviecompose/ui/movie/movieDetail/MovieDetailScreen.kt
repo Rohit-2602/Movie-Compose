@@ -1,10 +1,7 @@
-package com.example.moviecompose.ui.series
+package com.example.moviecompose.ui.movie.movieDetail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -23,35 +20,37 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.moviecompose.model.entities.Series
+import com.example.moviecompose.model.entities.Movie
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.*
+import com.example.moviecompose.ui.movie.MovieRowList
+import com.example.moviecompose.ui.movie.MovieRunTime
 
 @Composable
-fun SeriesDetailScreen(
+fun MovieDetailScreen(
     navController: NavController,
-    seriesId: Int,
-    viewModel: SeriesViewModel = hiltViewModel()
+    movieId: Int,
+    viewModel: MovieDetailViewModel = hiltViewModel()
 ) {
 
-    var isFavSeries by remember {
-        viewModel.isFavourite(seriesId = seriesId)
+    var isFavMovie by remember {
+        viewModel.isFavourite(movieId = movieId)
     }
 
-    val seriesDetail by remember {
-        viewModel.getSeriesDetails(seriesId = seriesId)
+    val movieDetails by remember {
+        viewModel.getMovieDetails(movieId = movieId)
     }
 
     val castList by remember {
-        viewModel.getSeriesCast(seriesId = seriesId)
+        viewModel.getMovieCast(movieId = movieId)
     }
 
     val trailerList by remember {
-        viewModel.getSeriesTrailers(seriesId = seriesId)
+        viewModel.getMovieTrailers(movieId = movieId)
     }
 
-    val seriesRecommendation by remember {
-        viewModel.getSeriesRecommendation(seriesId = seriesId)
+    val movieRecommendation by remember {
+        viewModel.getMovieRecommendation(movieId = movieId)
     }
 
     val isLoading by remember {
@@ -77,64 +76,57 @@ fun SeriesDetailScreen(
         }
         if (errorMessage.isNotEmpty()) {
             RetrySection(error = errorMessage) {
-                viewModel.getSeriesDetails(seriesId = seriesId)
+                viewModel.getMovieDetails(movieId = movieId)
             }
         }
-        if (!isLoading && errorMessage.isEmpty() && seriesDetail != null) {
+        if (!isLoading && errorMessage.isEmpty() && movieDetails != null) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
                     BackDropPoster(
-                        backDropPoster = MovieDBApi.getBackDropPath(seriesDetail!!.backdrop_path),
+                        backDropPoster = MovieDBApi.getBackDropPath(movieDetails!!.backdrop_path),
                         navController = navController,
-                        isFavourite = isFavSeries
+                        isFavourite = isFavMovie
                     ) {
-                        val genreIds = seriesDetail!!.genres.map { genre ->
+                        val genreIds = movieDetails!!.genres.map { genre ->
                             genre.id
                         }
-                        val series = Series(
-                            id = seriesDetail!!.id,
-                            name = seriesDetail!!.name,
-                            original_name = seriesDetail!!.original_name,
-                            overview = seriesDetail!!.overview,
-                            backdrop_path = seriesDetail!!.backdrop_path,
-                            poster_path = seriesDetail!!.poster_path,
+                        val movie = Movie(
+                            id = movieDetails!!.id,
+                            title = movieDetails!!.title,
+                            original_title = movieDetails!!.original_title,
+                            overview = movieDetails!!.overview,
+                            backdrop_path = movieDetails!!.backdrop_path,
+                            poster_path = movieDetails!!.poster_path,
                             genre_ids = genreIds,
-                            vote_average = seriesDetail!!.vote_average,
+                            vote_average = movieDetails!!.vote_average,
                             trailers = trailerList,
                             cast = castList,
-                            recommendation = seriesRecommendation
+                            recommendation = movieRecommendation
                         )
-                        if (isFavSeries) {
-                            viewModel.removeSeriesFromFavourite(series = series)
-                            isFavSeries = false
+                        if (isFavMovie) {
+                            viewModel.removeMovieFromFavourite(movie = movie)
+                            isFavMovie = false
                         } else {
-                            viewModel.addSeriesToFavourite(series = series)
-                            isFavSeries = true
+                            viewModel.addMovieToFavourite(movie = movie)
+                            isFavMovie = true
                         }
                     }
-                    if (!seriesDetail!!.genres.isNullOrEmpty()) {
+                    Row {
                         GenreRatingDetail(
-                            genre = seriesDetail!!.genres[0].name,
-                            voteAverage = seriesDetail!!.vote_average
+                            genre = movieDetails!!.genres[0].name,
+                            voteAverage = movieDetails!!.vote_average
                         )
+                        MovieRunTime(runTime = movieDetails!!.runtime)
                     }
                     TitleDescriptionDetail(
-                        title = seriesDetail!!.name,
-                        description = seriesDetail!!.overview
+                        title = movieDetails!!.original_title,
+                        description = movieDetails!!.overview
                     )
                     if (trailerList.isNotEmpty()) {
                         Trailers(trailers = trailerList)
                     }
-                    if (castList.isNotEmpty()) {
-                        CastList(castList = castList)
-                    }
-                    SeasonsList(
-                        seriesName = seriesDetail!!.name,
-                        seriesId = seriesId,
-                        seasons = seriesDetail!!.seasons,
-                        navController = navController
-                    )
-                    if (seriesRecommendation.isNotEmpty()) {
+                    CastList(castList = castList)
+                    if (movieRecommendation.isNotEmpty()) {
                         Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
                             Text(
                                 text = "Recommendations",
@@ -145,9 +137,9 @@ fun SeriesDetailScreen(
                                 ),
                                 modifier = Modifier.padding(start = 10.dp)
                             )
-                            SeriesRowList(
+                            MovieRowList(
                                 navController = navController,
-                                seriesList = seriesRecommendation
+                                movieList = movieRecommendation
                             )
                         }
                     }

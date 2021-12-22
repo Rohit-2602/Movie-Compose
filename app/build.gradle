@@ -96,6 +96,10 @@ dependencies {
     // Coil
     implementation "io.coil-kt:coil-compose:1.4.0"
 
+    // Moshi
+    implementation 'com.squareup.moshi:moshi:1.8.0'
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
+
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"

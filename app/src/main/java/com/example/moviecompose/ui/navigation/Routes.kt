@@ -25,4 +25,9 @@ sealed class NavScreen(val route: String) {
         const val argument1: String = "seasonNumber"
         const val argument2: String = "seriesName"
     }
+    object PersonDetail: NavScreen("PersonDetails") {
+        const val routeWithArgument: String = "PersonDetails/{personId}/{personKnownFor}"
+        const val argument0: String = "personId"
+        const val argument1: String = "personKnownFor"
+    }
 }

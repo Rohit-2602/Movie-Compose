@@ -1,4 +1,4 @@
-package com.example.moviecompose.ui.series
+package com.example.moviecompose.ui.series.seasonDetail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +33,7 @@ fun SeasonDetailScreen(
     seriesId: Int,
     seriesName: String,
     seasonNumber: Int,
-    viewModel: SeriesViewModel = hiltViewModel()
+    viewModel: SeasonDetailViewModel = hiltViewModel()
 ) {
 
     val season by remember {

@@ -26,27 +26,29 @@ class SearchViewModel @Inject constructor(
     private var currentPage = 2
 
     fun search(query: String) {
-        isLoading.value = true
-        viewModelScope.launch {
-            when (val result = searchRepository.search(query)) {
-                is Resource.Success -> {
-                    val searchResult = result.data!!.results.filter { multi ->
-                        if(multi.media_type == "tv") {
-                            multi.name != null && multi.poster_path != null
-                        } else {
-                            multi.title != null && multi.poster_path != null
+        if (query != "") {
+            viewModelScope.launch {
+                isLoading.value = true
+                when (val result = searchRepository.search(query)) {
+                    is Resource.Success -> {
+                        val searchResult = result.data!!.results.filter { multi ->
+                            if(multi.media_type == "tv") {
+                                multi.name != null && multi.poster_path != null
+                            } else {
+                                multi.title != null && multi.poster_path != null
+                            }
                         }
+                        loadError.value = ""
+                        isLoading.value = false
+                        searchedList.value = searchResult
                     }
-                    loadError.value = ""
-                    isLoading.value = false
-                    searchedList.value = searchResult
-                }
-                is Resource.Error -> {
-                    loadError.value = result.message!!
-                    isLoading.value = false
-                }
-                is Resource.Loading -> {
-                    isLoading.value = true
+                    is Resource.Error -> {
+                        loadError.value = result.message!!
+                        isLoading.value = false
+                    }
+                    is Resource.Loading -> {
+                        isLoading.value = true
+                    }
                 }
             }
         }

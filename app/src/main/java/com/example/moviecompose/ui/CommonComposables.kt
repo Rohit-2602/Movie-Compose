@@ -192,6 +192,11 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
     )
 
     // Rating
+    Chip(text = voteAverage, fontSize = fontSize, imageResId = R.drawable.ic_star)
+}
+
+@Composable
+fun Chip(text: String, fontSize: TextUnit, imageResId: Int) {
     Row(
         modifier = Modifier
             .offset(x = 10.dp)
@@ -202,14 +207,14 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_star),
+            painter = painterResource(id = imageResId),
             modifier = Modifier
                 .width(18.dp)
                 .height(18.dp),
             contentDescription = "Rating Start"
         )
         Text(
-            text = voteAverage,
+            text = text,
             style = TextStyle(
                 color = Color.White,
                 fontSize = fontSize,
@@ -218,7 +223,6 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
         )
     }
 }
-
 
 @Composable
 fun TitleDescriptionDetail(

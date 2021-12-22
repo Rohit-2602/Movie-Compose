@@ -8,15 +8,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.moviecompose.model.entities.Series
 import com.example.moviecompose.ui.MoviesSeriesHeader
 import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.util.Constant
@@ -27,7 +28,11 @@ fun SeriesScreen(
     viewModel: SeriesViewModel = hiltViewModel()
 ) {
 
-    var isLoading by remember {
+    val trendingSeries by remember {
+        viewModel.getTrendingSeries()
+    }
+
+    val isLoading by remember {
         viewModel.isLoading
     }
 
@@ -35,14 +40,13 @@ fun SeriesScreen(
         viewModel.loadError
     }
 
-    Box(
+    Surface(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colors.background)
     ) {
         if (errorMessage.isNotEmpty()) {
             RetrySection(error = errorMessage) {
-                isLoading = true
                 viewModel.getTrendingSeries()
             }
         }
@@ -55,7 +59,8 @@ fun SeriesScreen(
             LazyColumn(modifier = Modifier.padding(bottom = 10.dp)) {
                 item {
                     TrendingSeriesList(
-                        navController = navController
+                        navController = navController,
+                        trendingSeries = trendingSeries
                     )
                 }
                 item {
@@ -75,11 +80,8 @@ fun SeriesScreen(
 @Composable
 fun TrendingSeriesList(
     navController: NavController,
-    viewModel: SeriesViewModel = hiltViewModel()
+    trendingSeries: List<Series>
 ) {
-    val trendingSeries by remember {
-        viewModel.getTrendingSeries()
-    }
     Column {
         MoviesSeriesHeader(
             navController = navController,

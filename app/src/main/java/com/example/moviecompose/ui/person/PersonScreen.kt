@@ -1,8 +1,9 @@
-package com.example.moviecompose.ui.people
+package com.example.moviecompose.ui.person
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -25,20 +26,24 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.moviecompose.model.network.People
+import com.example.moviecompose.model.network.Person
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.RetrySection
+import com.example.moviecompose.ui.navigation.NavScreen
+import com.google.gson.Gson
 
 @ExperimentalFoundationApi
 @Composable
-fun PeopleScreen(
-    viewModel: PeopleViewModel = hiltViewModel()
+fun PersonScreen(
+    navController: NavController,
+    viewModel: PersonViewModel = hiltViewModel()
 ) {
     val searchQuery by remember {
         viewModel.searchQuery
     }
-    val peopleList by remember {
+    val personList by remember {
         viewModel.searchPerson("")
     }
     val errorMessage by remember {
@@ -61,7 +66,7 @@ fun PeopleScreen(
         if (errorMessage.isNotEmpty() && errorMessage != "HTTP 404 ") {
             RetrySection(error = errorMessage) {
                 isLoading = true
-                viewModel.getPeople()
+                viewModel.getPerson()
             }
         } else {
             Column {
@@ -78,15 +83,18 @@ fun PeopleScreen(
                     cells = GridCells.Fixed(2),
                     modifier = Modifier.padding(start = 10.dp)
                 ) {
-                    itemsIndexed(peopleList) { index, people ->
-                        if (index >= peopleList.size - 1) {
+                    itemsIndexed(personList) { index, Person ->
+                        if (index >= personList.size - 1) {
                             if (searchQuery == "") {
-                                viewModel.loadMorePeople()
+                                viewModel.loadMorePerson()
                             } else {
                                 viewModel.loadMoreSearchResult(searchQuery)
                             }
                         }
-                        PeopleList(people = people)
+                        PersonList(
+                            navController = navController,
+                            person = Person
+                        )
                     }
                 }
             }
@@ -96,20 +104,30 @@ fun PeopleScreen(
 
 @ExperimentalFoundationApi
 @Composable
-fun PeopleList(people: People) {
+fun PersonList(
+    navController: NavController,
+    person: Person
+) {
     Column(
         modifier = Modifier
             .padding(end = 10.dp, bottom = 10.dp)
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
-            .background(color = MaterialTheme.colors.background),
+            .background(color = MaterialTheme.colors.background)
+            .clickable {
+                for (knownFor in person.known_for) {
+                    knownFor.poster_path = knownFor.poster_path.substring(1)
+                }
+                val jsonString = Gson().toJson(person.known_for)
+                navController.navigate("${NavScreen.PersonDetail.route}/${person.id}/${jsonString}")
+            },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val painter =
-            rememberImagePainter(data = MovieDBApi.getProfileImage(people.profile_path))
+            rememberImagePainter(data = MovieDBApi.getProfileImage(person.profile_path))
         Image(
             painter = painter,
-            contentDescription = "People Image",
+            contentDescription = "Person Image",
             modifier = Modifier
                 .padding(top = 10.dp)
                 .size(120.dp)
@@ -117,16 +135,16 @@ fun PeopleList(people: People) {
                 .clip(shape = RoundedCornerShape(120.dp)),
             contentScale = ContentScale.Crop
         )
-        if (people.name != null) {
+        if (person.name != null) {
             Text(
-                text = people.name,
+                text = person.name,
                 style = TextStyle(color = Color.White, fontSize = 15.sp),
                 modifier = Modifier.padding(top = 5.dp)
             )
         }
-        if (people.known_for_department != null) {
+        if (person.known_for_department != null) {
             Text(
-                text = people.known_for_department,
+                text = person.known_for_department,
                 style = TextStyle(color = Color.White, fontSize = 14.sp),
                 modifier = Modifier.padding(bottom = 5.dp)
             )
@@ -138,14 +156,18 @@ fun PeopleList(people: People) {
 fun SearchBar(
     modifier: Modifier = Modifier,
     hint: String = "",
-    viewModel: PeopleViewModel = hiltViewModel(),
+    viewModel: PersonViewModel = hiltViewModel(),
     onSearch: (String) -> Unit = {}
 ) {
     var isHintDisplayed by remember {
         mutableStateOf(hint != "")
     }
 
-    Box(modifier = modifier.padding(10.dp).padding(top = 10.dp)) {
+    Box(
+        modifier = modifier
+            .padding(10.dp)
+            .padding(top = 10.dp)
+    ) {
         BasicTextField(
             value = viewModel.searchQuery.value,
             onValueChange = {
