@@ -125,7 +125,7 @@ fun MovieDetailScreen(
                     if (trailerList.isNotEmpty()) {
                         Trailers(trailers = trailerList)
                     }
-                    CastList(castList = castList)
+                    CastList(castList = castList, navController = navController)
                     if (movieRecommendation.isNotEmpty()) {
                         Column(modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)) {
                             Text(

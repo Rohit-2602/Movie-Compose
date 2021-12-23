@@ -128,7 +128,7 @@ fun SeriesDetailScreen(
                         Trailers(trailers = trailerList)
                     }
                     if (castList.isNotEmpty()) {
-                        CastList(castList = castList)
+                        CastList(castList = castList, navController = navController)
                     }
                     SeasonsList(
                         seriesName = seriesDetail!!.name,

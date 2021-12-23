@@ -1,5 +1,8 @@
 package com.example.moviecompose.model.network
 
+import com.example.moviecompose.model.entities.MoviePoster
+import com.example.moviecompose.model.entities.SeriesPoster
+
 data class PersonResponse(
     val page: Int,
     val results: List<Person>,
@@ -11,20 +14,20 @@ data class Person(
     val id: Long,
     val name: String?,
     val profile_path: String?,
-    val known_for: List<KnownFor>,
     val known_for_department: String?
 )
 
-// To get the list of movies from Person
-data class KnownFor(
-    val id: Int,
-    val media_type: String,
-    var poster_path: String
+data class PersonMovieResponse(
+    val cast: List<MoviePoster>
+)
+
+data class PersonSeriesResponse(
+    val cast: List<SeriesPoster>
 )
 
 data class PersonDetail(
     val id: Long,
-    val name: String?,
+    val name: String,
     val biography: String,
     val birthday: String,
     val deathday: String?,

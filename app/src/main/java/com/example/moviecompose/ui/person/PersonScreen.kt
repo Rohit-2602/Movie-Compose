@@ -32,7 +32,6 @@ import com.example.moviecompose.model.network.Person
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.ui.navigation.NavScreen
-import com.google.gson.Gson
 
 @ExperimentalFoundationApi
 @Composable
@@ -115,11 +114,7 @@ fun PersonList(
             .clip(shape = RoundedCornerShape(10.dp))
             .background(color = MaterialTheme.colors.background)
             .clickable {
-                for (knownFor in person.known_for) {
-                    knownFor.poster_path = knownFor.poster_path.substring(1)
-                }
-                val jsonString = Gson().toJson(person.known_for)
-                navController.navigate("${NavScreen.PersonDetail.route}/${person.id}/${jsonString}")
+                navController.navigate("${NavScreen.PersonDetail.route}/${person.id}")
             },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

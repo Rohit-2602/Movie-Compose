@@ -196,9 +196,9 @@ fun RatingGenreText(genre: String, voteAverage: String, fontSize: TextUnit) {
 }
 
 @Composable
-fun Chip(text: String, fontSize: TextUnit, imageResId: Int) {
+fun Chip(text: String, fontSize: TextUnit, imageResId: Int, modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .offset(x = 10.dp)
             .shadow(elevation = 5.dp, shape = RoundedCornerShape(10.dp))
             .clip(shape = RoundedCornerShape(10.dp))
@@ -285,7 +285,7 @@ fun PosterImage(posterPath: String) {
 }
 
 @Composable
-fun CastList(castList: List<Cast>) {
+fun CastList(castList: List<Cast>, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -304,7 +304,10 @@ fun CastList(castList: List<Cast>) {
                     )
                 Column(
                     modifier = Modifier
-                        .padding(end = 10.dp),
+                        .padding(end = 10.dp)
+                        .clickable {
+                            navController.navigate("${NavScreen.PersonDetail.route}/${castList[it].id}")
+                        },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(

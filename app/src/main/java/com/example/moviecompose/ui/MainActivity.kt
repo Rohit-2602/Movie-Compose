@@ -186,18 +186,13 @@ class MainActivity : ComponentActivity() {
                             arguments = listOf(
                                 navArgument(NavScreen.PersonDetail.argument0) {
                                     type = NavType.IntType
-                                },
-                                navArgument(NavScreen.PersonDetail.argument0) {
-                                    type = NavType.StringType
                                 }
                             )
                         ) {
                             val personId = it.arguments?.getInt(NavScreen.PersonDetail.argument0)
-                            val personKnownFor = it.arguments?.getString(NavScreen.PersonDetail.argument1)
                             PersonDetailScreen(
                                 navController = navController,
-                                personId = personId!!,
-                                personKnownFor = personKnownFor!!
+                                personId = personId!!
                             )
                         }
                     }

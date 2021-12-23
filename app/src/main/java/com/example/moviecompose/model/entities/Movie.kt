@@ -18,3 +18,9 @@ data class Movie(
     val cast: List<Cast> = emptyList(),
     val recommendation: List<Movie> = emptyList()
 )
+
+// Use in screen where we just need Poster Path and id
+data class MoviePoster(
+    val id: Int,
+    val poster_path: String?
+)

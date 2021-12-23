@@ -18,3 +18,9 @@ data class Series(
     val cast: List<Cast> = emptyList(),
     val recommendation: List<Series> = emptyList()
 )
+
+// Use in screen where we just need Poster Path and id
+data class SeriesPoster(
+    val id: Int,
+    val poster_path: String?
+)
