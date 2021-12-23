@@ -26,9 +26,27 @@ class SeriesRepository @Inject constructor(
         return Resource.Success(result)
     }
 
+    suspend fun getTrendingSeriesPoster(page: Int = 1): Resource<PosterSeriesResponse> {
+        val result = try {
+            seriesService.getTrendingSeriesPoster(page = page)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
     suspend fun getSeriesBasedOnGenre(genre: Int, page: Int = 1): Resource<SeriesResponse> {
         val result = try {
             seriesService.getSeriesBasedOnGenre(genre = genre, page = page)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getSeriesPosterBasedOnGenre(genre: Int, page: Int = 1): Resource<PosterSeriesResponse> {
+        val result = try {
+            seriesService.getSeriesPosterBasedOnGenre(genre = genre, page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
@@ -56,6 +74,15 @@ class SeriesRepository @Inject constructor(
     suspend fun getSeriesRecommendation(seriesId: Int): Resource<SeriesResponse> {
         val result = try {
             seriesService.getSeriesRecommendations(seriesId = seriesId)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getSeriesPosterRecommendation(seriesId: Int): Resource<PosterSeriesResponse> {
+        val result = try {
+            seriesService.getSeriesPosterRecommendations(seriesId = seriesId)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }

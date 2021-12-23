@@ -11,7 +11,8 @@ import com.example.moviecompose.persistance.converters.*
 @TypeConverters(
     value = [
         (CastListConverter::class), (MovieListConverter::class), (SeriesListConverter::class),
-        (VideoListConverter::class), (IntegerListComparator::class)
+        (VideoListConverter::class), (IntegerListComparator::class), (PosterMovieListConverter::class),
+        (PosterSeriesListConverter::class)
     ]
 )
 abstract class AppDatabase : RoomDatabase() {

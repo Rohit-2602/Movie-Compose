@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviecompose.model.entities.Movie
+import com.example.moviecompose.model.entities.MoviePoster
 import com.example.moviecompose.model.network.Cast
 import com.example.moviecompose.model.network.MovieDetailResponse
 import com.example.moviecompose.model.network.Video
@@ -92,6 +93,28 @@ class MovieDetailViewModel @Inject constructor(private val movieRepository: Movi
         val recommendation = mutableStateOf<List<Movie>>(listOf())
         viewModelScope.launch {
             when (val result = movieRepository.getMovieRecommendation(movieId = movieId)) {
+                is Resource.Success -> {
+                    isLoading.value = false
+                    loadError.value = ""
+                    recommendation.value = result.data!!.results
+                }
+                is Resource.Error -> {
+                    loadError.value = result.message!!
+                    isLoading.value = false
+                }
+                is Resource.Loading -> {
+                    isLoading.value = true
+                }
+            }
+        }
+        return recommendation
+    }
+
+    fun getMoviePosterRecommendation(movieId: Int): MutableState<List<MoviePoster>> {
+        isLoading.value = true
+        val recommendation = mutableStateOf<List<MoviePoster>>(listOf())
+        viewModelScope.launch {
+            when (val result = movieRepository.getMoviePosterRecommendation(movieId = movieId)) {
                 is Resource.Success -> {
                     isLoading.value = false
                     loadError.value = ""

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviecompose.model.entities.Series
+import com.example.moviecompose.model.entities.SeriesPoster
 import com.example.moviecompose.model.network.Cast
 import com.example.moviecompose.model.network.SeriesDetailResponse
 import com.example.moviecompose.model.network.Video
@@ -87,11 +88,11 @@ class SeriesDetailViewModel @Inject constructor(private val seriesRepository: Se
         return seriesCast
     }
 
-    fun getSeriesRecommendation(seriesId: Int): MutableState<List<Series>> {
+    fun getSeriesRecommendation(seriesId: Int): MutableState<List<SeriesPoster>> {
         isLoading.value = true
-        val recommendation = mutableStateOf<List<Series>>(listOf())
+        val recommendation = mutableStateOf<List<SeriesPoster>>(listOf())
         viewModelScope.launch {
-            when(val result = seriesRepository.getSeriesRecommendation(seriesId = seriesId)) {
+            when(val result = seriesRepository.getSeriesPosterRecommendation(seriesId = seriesId)) {
                 is Resource.Success -> {
                     isLoading.value = false
                     loadError.value = ""

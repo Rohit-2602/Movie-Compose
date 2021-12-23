@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.moviecompose.model.entities.Series
+import com.example.moviecompose.model.entities.SeriesPoster
 import com.example.moviecompose.model.network.Season
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.navigation.NavScreen
@@ -29,7 +29,7 @@ import com.example.moviecompose.ui.navigation.NavScreen
 @Composable
 fun SeriesImage(
     navController: NavController,
-    series: Series
+    series: SeriesPoster
 ) {
     val painter = rememberImagePainter(
         data = MovieDBApi.getPosterPath(series.poster_path)
@@ -54,7 +54,7 @@ fun SeriesImage(
 @Composable
 fun SeriesRowList(
     navController: NavController,
-    seriesList: List<Series>,
+    seriesList: List<SeriesPoster>,
 ) {
     LazyRow(modifier = Modifier.padding(end = 10.dp, top = 10.dp)) {
         val itemCount = if (seriesList.size > 10) {

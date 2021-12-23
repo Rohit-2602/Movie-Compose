@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviecompose.model.entities.Movie
+import com.example.moviecompose.model.entities.MoviePoster
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,11 +18,11 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
 
-    private val trendingMoviesList = mutableStateOf<List<Movie>>(listOf())
-    fun getTrendingMovies(): MutableState<List<Movie>> {
+    private val trendingMoviesList = mutableStateOf<List<MoviePoster>>(listOf())
+    fun getTrendingMovies(): MutableState<List<MoviePoster>> {
         viewModelScope.launch {
             isLoading.value = true
-            when (val result = movieRepository.getTrendingMovies()) {
+            when (val result = movieRepository.getTrendingMoviesPoster()) {
                 is Resource.Success -> {
                     val movies = result.data!!.results
                         .filter { movie ->
@@ -44,10 +44,10 @@ class MovieViewModel @Inject constructor(private val movieRepository: MovieRepos
         return trendingMoviesList
     }
 
-    fun getMoviesByGenre(genre: Int): MutableState<List<Movie>> {
-        val genreMovie = mutableStateOf<List<Movie>>(listOf())
+    fun getMoviesByGenre(genre: Int): MutableState<List<MoviePoster>> {
+        val genreMovie = mutableStateOf<List<MoviePoster>>(listOf())
         viewModelScope.launch {
-            when (val result = movieRepository.getMoviesBasedOnGenre(genre = genre)) {
+            when (val result = movieRepository.getMoviesPosterBasedOnGenre(genre = genre)) {
                 is Resource.Success -> {
                     val movies = result.data!!.results
                         .filter { movie ->

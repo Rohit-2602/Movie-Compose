@@ -16,7 +16,7 @@ data class Series(
     val vote_average: String,
     var trailers: List<Video>? = emptyList(),
     val cast: List<Cast> = emptyList(),
-    val recommendation: List<Series> = emptyList()
+    val recommendation: List<SeriesPoster> = emptyList()
 )
 
 // Use in screen where we just need Poster Path and id

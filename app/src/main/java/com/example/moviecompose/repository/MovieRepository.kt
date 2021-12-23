@@ -1,10 +1,7 @@
 package com.example.moviecompose.repository
 
 import com.example.moviecompose.model.entities.Movie
-import com.example.moviecompose.model.network.CastResponse
-import com.example.moviecompose.model.network.MovieDetailResponse
-import com.example.moviecompose.model.network.MovieResponse
-import com.example.moviecompose.model.network.VideoResponse
+import com.example.moviecompose.model.network.*
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.network.service.MovieService
 import com.example.moviecompose.persistance.MovieDao
@@ -29,9 +26,27 @@ class MovieRepository @Inject constructor(
         return Resource.Success(result)
     }
 
+    suspend fun getTrendingMoviesPoster(page: Int = 1): Resource<PosterMovieResponse> {
+        val result = try {
+            movieService.getTrendingMoviesPoster(page = page)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
     suspend fun getMoviesBasedOnGenre(genre: Int, page: Int = 1): Resource<MovieResponse> {
         val result = try {
             movieService.getMoviesBasedOnGenre(genre = genre, page = page)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getMoviesPosterBasedOnGenre(genre: Int, page: Int = 1): Resource<PosterMovieResponse> {
+        val result = try {
+            movieService.getMoviesPosterBasedOnGenre(genre = genre, page = page)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }
@@ -59,6 +74,15 @@ class MovieRepository @Inject constructor(
     suspend fun getMovieRecommendation(movieId: Int): Resource<MovieResponse> {
         val result = try {
             movieService.getMovieRecommendations(movieId = movieId)
+        } catch (exception: Exception) {
+            return Resource.Error(message = exception.message!!.toString())
+        }
+        return Resource.Success(result)
+    }
+
+    suspend fun getMoviePosterRecommendation(movieId: Int): Resource<PosterMovieResponse> {
+        val result = try {
+            movieService.getMoviePosterRecommendations(movieId = movieId)
         } catch (exception: Exception) {
             return Resource.Error(message = exception.message!!.toString())
         }

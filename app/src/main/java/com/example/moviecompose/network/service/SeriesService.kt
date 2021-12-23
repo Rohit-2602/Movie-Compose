@@ -10,11 +10,20 @@ interface SeriesService {
     @GET("3/trending/tv/week")
     suspend fun getTrendingSeries(@Query("page") page: Int = 1): SeriesResponse
 
+    @GET("3/trending/tv/week")
+    suspend fun getTrendingSeriesPoster(@Query("page") page: Int = 1): PosterSeriesResponse
+
     @GET("3/discover/tv")
     suspend fun getSeriesBasedOnGenre(
         @Query("page") page: Int = 1,
         @Query("with_genres") genre: Int
     ): SeriesResponse
+
+    @GET("3/discover/tv")
+    suspend fun getSeriesPosterBasedOnGenre(
+        @Query("page") page: Int = 1,
+        @Query("with_genres") genre: Int
+    ): PosterSeriesResponse
 
     @GET("3/tv/{seriesId}")
     suspend fun getSeriesDetails(@Path("seriesId") seriesId: Int): SeriesDetailResponse
@@ -24,6 +33,9 @@ interface SeriesService {
 
     @GET("3/tv/{seriesId}/recommendations")
     suspend fun getSeriesRecommendations(@Path("seriesId") seriesId: Int): SeriesResponse
+
+    @GET("3/tv/{seriesId}/recommendations")
+    suspend fun getSeriesPosterRecommendations(@Path("seriesId") seriesId: Int): PosterSeriesResponse
 
     @GET("3/tv/{seriesId}/videos")
     suspend fun getSeriesVideos(@Path("seriesId") seriesId: Int): VideoResponse

@@ -50,7 +50,7 @@ fun MovieDetailScreen(
     }
 
     val movieRecommendation by remember {
-        viewModel.getMovieRecommendation(movieId = movieId)
+        viewModel.getMoviePosterRecommendation(movieId = movieId)
     }
 
     val isLoading by remember {

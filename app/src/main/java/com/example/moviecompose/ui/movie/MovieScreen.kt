@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.moviecompose.model.entities.Movie
+import com.example.moviecompose.model.entities.MoviePoster
 import com.example.moviecompose.ui.MoviesSeriesHeader
 import com.example.moviecompose.ui.RetrySection
 import com.example.moviecompose.util.Constant
@@ -78,7 +78,7 @@ fun MovieScreen(
 @Composable
 fun TrendingMovieList(
     navController: NavController,
-    trendingMovies: List<Movie>
+    trendingMovies: List<MoviePoster>
 ) {
     MoviesSeriesHeader(
         navController = navController,

@@ -22,14 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
-import com.example.moviecompose.model.entities.Movie
+import com.example.moviecompose.model.entities.MoviePoster
 import com.example.moviecompose.network.MovieDBApi
 import com.example.moviecompose.ui.navigation.NavScreen
 
 @Composable
 fun MovieImage(
     navController: NavController,
-    movie: Movie
+    movie: MoviePoster
 ) {
     val painter = rememberImagePainter(
         data = MovieDBApi.getPosterPath(movie.poster_path)
@@ -54,7 +54,7 @@ fun MovieImage(
 @Composable
 fun MovieRowList(
     navController: NavController,
-    movieList: List<Movie>,
+    movieList: List<MoviePoster>,
 ) {
     LazyRow(modifier = Modifier.padding(end = 10.dp, top = 10.dp)) {
         val itemCount = if (movieList.size > 10) {

@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviecompose.model.entities.Series
+import com.example.moviecompose.model.entities.SeriesPoster
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,11 +18,11 @@ class SeriesViewModel @Inject constructor(private val seriesRepository: SeriesRe
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
 
-    private val trendingSeriesList = mutableStateOf<List<Series>>(listOf())
-    fun getTrendingSeries(): MutableState<List<Series>> {
+    private val trendingSeriesList = mutableStateOf<List<SeriesPoster>>(listOf())
+    fun getTrendingSeries(): MutableState<List<SeriesPoster>> {
         viewModelScope.launch {
             isLoading.value = true
-            when (val result = seriesRepository.getTrendingSeries()) {
+            when (val result = seriesRepository.getTrendingSeriesPoster()) {
                 is Resource.Success -> {
                     val series = result.data!!.results
                         .filter { series ->
@@ -44,10 +44,10 @@ class SeriesViewModel @Inject constructor(private val seriesRepository: SeriesRe
         return trendingSeriesList
     }
 
-    fun getSeriesByGenre(genre: Int): MutableState<List<Series>> {
-        val genreSeries = mutableStateOf<List<Series>>(listOf())
+    fun getSeriesByGenre(genre: Int): MutableState<List<SeriesPoster>> {
+        val genreSeries = mutableStateOf<List<SeriesPoster>>(listOf())
         viewModelScope.launch {
-            when (val result = seriesRepository.getSeriesBasedOnGenre(genre = genre)) {
+            when (val result = seriesRepository.getSeriesPosterBasedOnGenre(genre = genre)) {
                 is Resource.Success -> {
                     val series = result.data!!.results
                         .filter { series ->
