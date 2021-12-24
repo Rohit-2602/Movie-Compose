@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -39,8 +40,21 @@ fun RetrySection(error: String, onRetry: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(text = error, style = TextStyle(color = Color.White, fontSize = 20.sp))
-        Button(onClick = { onRetry() }) {
+        Text(
+            text = "No Internet Connection",
+            style = TextStyle(
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        )
+        Text(
+            modifier = Modifier.padding(top = 10.dp),
+            text = "Check Your Internet Connection",
+            style = TextStyle(color = Color.White, fontSize = 18.sp, textAlign = TextAlign.Center)
+        )
+        Button(onClick = { onRetry() }, modifier = Modifier.padding(top = 20.dp)) {
             Text(text = "Retry")
         }
     }

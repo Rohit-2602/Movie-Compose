@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,6 +61,15 @@ fun PersonScreen(
         if (isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
+            }
+        }
+        if (personList.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text(
+                    modifier = Modifier.padding(20.dp),
+                    text = "No Result found for query \"${searchQuery}\"",
+                    style = TextStyle(color = Color.White, fontSize = 18.sp, textAlign = TextAlign.Center)
+                )
             }
         }
         if (errorMessage.isNotEmpty() && errorMessage != "HTTP 404 ") {

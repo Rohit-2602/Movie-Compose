@@ -19,7 +19,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.moviecompose.model.entities.Multi
@@ -67,6 +69,7 @@ fun SearchScreen(
                 viewModel.searchQuery.value = it
                 viewModel.search(it)
             }
+            SearchSomethingText()
             if (isLoading) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -75,6 +78,15 @@ fun SearchScreen(
             if (errorMessage.isNotEmpty()) {
                 RetrySection(error = errorMessage) {
                     viewModel.search(searchQuery)
+                }
+            }
+            if (searchList.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        modifier = Modifier.padding(20.dp),
+                        text = "No Result found for query \"${searchQuery}\"",
+                        style = TextStyle(color = Color.White, fontSize = 18.sp, textAlign = TextAlign.Center)
+                    )
                 }
             }
             if (errorMessage.isEmpty() && !isLoading && searchList.isNotEmpty()) {
@@ -91,6 +103,27 @@ fun SearchScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun SearchSomethingText(viewModel: SearchViewModel = hiltViewModel()) {
+    val searchQuery by remember {
+        viewModel.searchQuery
+    }
+    if (searchQuery == "") {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier.padding(20.dp),
+                text = "Search For Movie or Series, and we'll track it down for you",
+                style = TextStyle(color = Color.White, fontSize = 18.sp, textAlign = TextAlign.Center)
+            )
         }
     }
 }
@@ -128,9 +161,11 @@ fun SearchListItem(navController: NavController, mediaType: String, multi: Multi
             }
     ) {
         PosterImage(posterPath = posterPath)
-        Column(modifier = Modifier
-            .height(150.dp)
-            .padding(start = 10.dp)) {
+        Column(
+            modifier = Modifier
+                .height(150.dp)
+                .padding(start = 10.dp)
+        ) {
             val title: String = if (mediaType == "tv") {
                 multi.name!!
             } else {
@@ -155,7 +190,11 @@ fun SearchBar(
         mutableStateOf(hint != "")
     }
 
-    Box(modifier = modifier.padding(10.dp).padding(top = 10.dp)) {
+    Box(
+        modifier = modifier
+            .padding(10.dp)
+            .padding(top = 10.dp)
+    ) {
         BasicTextField(
             value = viewModel.searchQuery.value,
             onValueChange = {
