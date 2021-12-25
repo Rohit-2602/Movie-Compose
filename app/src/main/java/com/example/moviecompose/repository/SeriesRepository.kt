@@ -4,7 +4,7 @@ import com.example.moviecompose.model.entities.Series
 import com.example.moviecompose.model.network.*
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.network.service.SeriesService
-import com.example.moviecompose.persistance.SeriesDao
+import com.example.moviecompose.persistence.SeriesDao
 import javax.inject.Inject
 
 class SeriesRepository @Inject constructor(

@@ -1,4 +1,4 @@
-package com.example.moviecompose.persistance
+package com.example.moviecompose.persistence
 
 import androidx.room.*
 import com.example.moviecompose.model.entities.Movie

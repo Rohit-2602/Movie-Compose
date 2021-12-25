@@ -1,4 +1,4 @@
-package com.example.moviecompose.persistance.converters
+package com.example.moviecompose.persistence.converters
 
 import androidx.room.TypeConverter
 import com.example.moviecompose.model.entities.Series

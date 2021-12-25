@@ -2,9 +2,9 @@ package com.example.moviecompose.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.moviecompose.persistance.AppDatabase
-import com.example.moviecompose.persistance.MovieDao
-import com.example.moviecompose.persistance.SeriesDao
+import com.example.moviecompose.persistence.AppDatabase
+import com.example.moviecompose.persistence.MovieDao
+import com.example.moviecompose.persistence.SeriesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

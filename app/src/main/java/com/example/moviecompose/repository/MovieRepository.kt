@@ -4,7 +4,7 @@ import com.example.moviecompose.model.entities.Movie
 import com.example.moviecompose.model.network.*
 import com.example.moviecompose.network.Resource
 import com.example.moviecompose.network.service.MovieService
-import com.example.moviecompose.persistance.MovieDao
+import com.example.moviecompose.persistence.MovieDao
 import javax.inject.Inject
 
 class MovieRepository @Inject constructor(

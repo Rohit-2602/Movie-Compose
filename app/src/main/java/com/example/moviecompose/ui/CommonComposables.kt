@@ -1,5 +1,8 @@
 package com.example.moviecompose.ui
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -356,7 +359,7 @@ fun CastList(castList: List<Cast>, navController: NavController) {
 }
 
 @Composable
-fun Trailers(trailers: List<Video>) {
+fun Trailers(trailers: List<Video>, context: Context) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -374,7 +377,17 @@ fun Trailers(trailers: List<Video>) {
                         builder = {
                             size(120 * 90)
                         })
-                Column(modifier = Modifier.padding(end = 10.dp)) {
+                Box(
+                    modifier = Modifier
+                        .padding(end = 10.dp)
+                        .clickable {
+                            val youtubeURL = MovieDBApi.getYoutubeUrl(trailers[it].key)
+                            val openVideoIntent = Intent(Intent.ACTION_VIEW, Uri.parse(youtubeURL))
+                            context.startActivity(openVideoIntent)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    val youtubeIcon = rememberImagePainter(data = R.drawable.ic_youtube)
                     Image(
                         painter = painter,
                         contentDescription = "Youtube Thumbnail",
@@ -385,6 +398,13 @@ fun Trailers(trailers: List<Video>) {
                             .clip(shape = RoundedCornerShape(10.dp))
                             .background(color = MaterialTheme.colors.background),
                         contentScale = ContentScale.Crop
+                    )
+                    Image(
+                        modifier = Modifier
+                            .width(40.dp)
+                            .height(30.dp),
+                        painter = youtubeIcon,
+                        contentDescription = "Youtube Icon"
                     )
                 }
             }
